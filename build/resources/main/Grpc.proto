@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package proto;
+
+
+message RobotInfo {
+  string robotId = 1;
+  string robotIp = 2;
+  int32 robotPort = 3;
+  int32 x = 4;
+  int32 y = 5;
+  int32 district = 6;
+
+}
+
+message Empty {}
+
+message RemoveRobotResponse {
+  string reply = 1;
+}
+
+message RemoveRobotRequest {
+  string robotId = 1;
+}
+
+message RobotAliveRequest {
+  string ack = 1;
+}
+
+message RobotAliveResponse {
+  string msg = 1;
+}
+
+message RobotBalanceRequest {
+  string robotId = 1;
+  int32 district = 2;
+}
+
+
+
+service RobotService {
+  rpc NotifyNewRobot (RobotInfo) returns (Empty);
+  rpc removeRobot (RemoveRobotRequest) returns (RemoveRobotResponse);
+  rpc RobotAlive (RobotAliveRequest) returns (RobotAliveResponse);
+  rpc BalanceDistrict (RobotBalanceRequest) returns (Empty);
+}
