@@ -1,0 +1,41 @@
+# Ignore compiled class files
+*.class
+
+# Ignore build output directories
+target/
+out/
+
+# Ignore IDE-specific files and directories
+.idea/
+.vscode/
+
+# Ignore Maven build files and directories
+/.mvn/
+mvnw
+mvnw.cmd
+.mvn/wrapper/
+
+# Ignore Gradle build files and directories
+.gradle/
+build/
+
+# Ignore Jersey-generated files
+generated/
+
+# Ignore gRPC-generated files
+build/generated/
+
+# Ignore project-specific configuration files (e.g., IDE settings)
+*.iml
+*.ipr
+*.iws
+*.prefs
+
+# Ignore log files
+*.log
+
+# Ignore macOS specific files
+.DS_Store
+
+# Ignore folders starting with "phao"
+/paho*/
