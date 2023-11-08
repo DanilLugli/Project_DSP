@@ -24,10 +24,10 @@ public class PollutionRequest {
     }
 
 
-    @Path("get/{n}")
+    @Path("get/{robotId}/{n}")
     @GET
     @Produces({"application/json", "application/xml"})
-    public Response getLastNPollution(String robotID, @PathParam("n") int n){
+    public Response getLastNPollution(@PathParam("robotId") String robotID, @PathParam("n") int n){
         double l = PollutionModels.getInstance().getLastNPollution(robotID, n);
         return Response.ok(l).build();
     }

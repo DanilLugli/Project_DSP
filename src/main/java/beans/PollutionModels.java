@@ -1,5 +1,7 @@
 package beans;
 
+import com.google.gson.Gson;
+
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.*;
@@ -17,11 +19,25 @@ public class PollutionModels {
         dictionaryPollution = new HashMap<String, ArrayList<Pollution>>();
     }
 
+
     public synchronized static PollutionModels getInstance(){
         if(instance == null){
             instance = new PollutionModels();
         }
         return instance;
+    }
+
+    public void printDictionary() {
+        for (Map.Entry<String, ArrayList<Pollution>> entry : dictionaryPollution.entrySet()) {
+            String key = entry.getKey();
+            ArrayList<Pollution> values = entry.getValue();
+
+            System.out.println("Chiave: " + key);
+            System.out.println("Valori: ");
+            for (Pollution pollution : values) {
+                System.out.println("  " + pollution.toString()); // Assumendo che Pollution abbia un metodo toString appropriato
+            }
+        }
     }
 
     public synchronized Map<String, ArrayList<Pollution>> getListPollution(){
@@ -39,25 +55,36 @@ public class PollutionModels {
 
             pollutionList.add(pollution);
             dictionaryPollution.put(robotId, pollutionList);
-            System.out.println(pollutionList.isEmpty());
+
+            //Print Data List for each Robot
+            for (Map.Entry<String, ArrayList<Pollution>> entry : dictionaryPollution.entrySet()) {
+                String key = entry.getKey();
+                ArrayList<Pollution> values = entry.getValue();
+
+                System.out.println("Robot: " + key);
+
+                for (Pollution pollution2 : values) {
+                    System.out.println("  - " + pollution2.getPm_10());
+                }
+            }
+
+
         }
     }
 
 
     public synchronized double getLastNPollution(String robotId, int n) {
 
-        System.out.println(robotId + n);
-
-        ArrayList<Pollution> lastN = dictionaryPollution.get(robotId);
+        ArrayList<Pollution> lastN = PollutionModels.getInstance().dictionaryPollution.get(robotId);
         if (lastN != null) {
-            System.out.println("Pm_10 values for robot " + robotId + ":");
             lastN.stream().mapToDouble(Pollution::getPm_10).forEach(value -> System.out.println(value));
             return lastN.stream().mapToDouble(Pollution::getPm_10).sum() / n;
         } else {
-            System.out.println("Robot does not exist.");
-            return 0; // Or any other appropriate default value
+            System.out.println("Robot does not exist. The problem is here!!");
+            return 0;
         }
     }
+
 
     public synchronized double getAvgPollutionTimestamp(long t1, long t2){
         List<Double> pollutionValues = new ArrayList<>();

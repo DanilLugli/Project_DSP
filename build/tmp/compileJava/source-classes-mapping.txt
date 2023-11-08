@@ -13,8 +13,8 @@ GRPC/RobotAlive.java
  GRPC.RobotAlive
 simulators/Buffer.java
  simulators.Buffer
-AdministratorClient.java
- AdministratorClient
+beans/Robot.java
+ beans.Robot
 GRPC/NotifyNewRobot.java
  GRPC.NotifyNewRobot
 beans/RobotList.java
@@ -27,9 +27,8 @@ GRPC/RemoveRobot.java
  GRPC.RemoveRobot
 beans/Position.java
  beans.Position
-StartServer.java
- StartServer
- StartServer$1
+simulators/Measurement.java
+ simulators.Measurement
 GRPC/BalanceDistrict.java
  GRPC.BalanceDistrict
 simulators/Simulator.java
@@ -81,11 +80,12 @@ beans/CoordRobot.java
  beans.CoordRobot
 simulators/PM10Simulator.java
  simulators.PM10Simulator
+AdministratorClient.java
+ AdministratorClient
+StartServer.java
+ StartServer
+ StartServer$1
 beans/PollutionModels.java
  beans.PollutionModels
-beans/Robot.java
- beans.Robot
-simulators/Measurement.java
- simulators.Measurement
 services/PollutionRequest.java
  services.PollutionRequest

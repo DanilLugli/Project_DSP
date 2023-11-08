@@ -1,12 +1,12 @@
 import beans.*;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.lang.reflect.Type;
+import java.util.*;
 
 public class AdministratorClient {
 
@@ -54,43 +54,68 @@ public class AdministratorClient {
     private static void getLastNAvg() {
         Scanner sc = new Scanner(System.in);
 
-        getListRobots();
-        System.out.println("____");
-
         System.out.print("Enter the ID of the robot you need: ");
         String robotId = sc.next();
 
-        WebResource webResource = client.resource(restAddressRobots + "/getList");
+        Client client = Client.create();
+
+        System.out.println("Enter the number of PM you need: ");
+        int n = sc.nextInt();
+
+        WebResource webResource = client.resource(restAddressStatistic + "/get/"+ robotId + "/" + n);
         ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
-        Gson gson = new Gson();
-        List<Robot> r = gson.fromJson((response.getEntity(String.class)), RobotList.class).getRobots();
 
-        for (Robot r1 : r
-             ) {
-            if(r1.getID().equals(robotId)){
+        if (response.getStatus() == 200) {
+            Gson gson = new Gson();
+            String responseBody = response.getEntity(String.class);
+            double lastNPollution = gson.fromJson(responseBody, Double.class);
 
-                System.out.print("Enter the number of pollution data you want: ");
-                int n = sc.nextInt();
-                String nJson = gson.toJson(n);
-
-                WebResource webResource2 = client.resource(restAddressStatistic + "/get" + nJson);
-                System.out.println(webResource2);
-                ClientResponse response2 = webResource2.type("application/json").get(ClientResponse.class);
-                System.out.println(response2);   // --> NOT FOUND 404
-                /*
-                * BISOGNA CAPIRE DOVE AGGIUNGO LE MEDIE, E CAPIRE SE LE AGGIUNGE DAVVERO
-                *
-                * */
-
-                try {
-                    double avg = PollutionModels.getInstance().getLastNPollution(robotId, n);
-                    System.out.println("\nThe average of the last " + n + " pm_10 of " + robotId + " is: " + avg);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            System.out.println("Last N Pollution for Robot " + robotId + " with n=" + n + ": " + lastNPollution);
+        } else {
+            System.out.println("Error: " + response.getStatus());
         }
     }
+
+    /*private static void getLastNAvg() {
+        Scanner sc = new Scanner(System.in);
+
+        WebResource webResource = client.resource(restAddressStatistic + "/get");
+        ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
+
+        if (response.getStatus() == 200) {
+            try {
+                Gson gson = new Gson();
+                Type mapType = new TypeToken<HashMap<String, ArrayList<Pollution>>>() {}.getType();
+                HashMap<String, ArrayList<Pollution>> pollutionMap = gson.fromJson(response.getEntity(String.class), mapType);
+
+                System.out.print("Enter the ID of the robot you need: ");
+                String robotId = sc.next();
+
+                ArrayList<Pollution> pollutionData = pollutionMap.get(robotId);
+
+                if (pollutionData != null) {
+                    System.out.print("Enter the number of pollution data you want: ");
+                    int n = sc.nextInt();
+
+                    if (pollutionData.size() >= n) {
+                        ArrayList<Pollution> lastNData = new ArrayList<>(pollutionData.subList(pollutionData.size() - n, pollutionData.size()));
+
+                        double avg = lastNData.stream().mapToDouble(Pollution::getPm_10).average().orElse(0.0);
+                        System.out.println("The average of the last " + n + " pm_10 of " + robotId + " is: " + avg);
+                    } else {
+                        System.out.println("Not enough data available for " + robotId);
+                    }
+                } else {
+                    System.out.println("No data available for " + robotId);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Error getting pollution data. Status code: " + response.getStatus());
+        }
+    }*/
+
 
 
     private static void getPollutionTimestamp() {
