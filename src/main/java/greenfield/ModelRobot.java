@@ -10,15 +10,8 @@ import java.util.ArrayList;
 @XmlRootElement
 public class ModelRobot {
 
-
-    /*
-    MECHANIC:
-    - 1 boolean to know
-
-    */
-
-
     private Robot robot;
+    private boolean mechanic = false;
 
     private ArrayList<Robot> robotArrayList;
     private static ModelRobot instance;
@@ -64,7 +57,16 @@ public class ModelRobot {
         }
     }
 
+    public synchronized void requestMechanic() throws InterruptedException {
+        while (mechanic) {
+            wait();
+        }
+        mechanic = true;
+    }
 
-
+    public synchronized void releaseMechanic() {
+        mechanic = false;
+        notifyAll();
+    }
 
 }

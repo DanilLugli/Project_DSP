@@ -1,12 +1,12 @@
-import beans.*;
+import beans.Robot;
+import beans.RobotList;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-import java.lang.reflect.Type;
-import java.util.*;
+import java.util.List;
+import java.util.Scanner;
 
 public class AdministratorClient {
 
@@ -16,7 +16,7 @@ public class AdministratorClient {
     public static Scanner sc = new Scanner(System.in);
 
 
-    static String ListRequestClient = "What you need? Select with the number of method: \n" +
+    static String ListRequestClient = "What you need? Select the number of method: \n" +
             "\t(1) Get list of robots in Greenfield\n" +
             "\t(2) Get average of the last n air pollution levels sent to the server by a given robot\n" +
             "\t(3) Get average of the air pollution levels sent by all the robots to the server and occurred from timestamps t1 and t2\n" +
@@ -50,14 +50,12 @@ public class AdministratorClient {
 
     }
 
-
     private static void getLastNAvg() {
         Scanner sc = new Scanner(System.in);
+        Client client = Client.create();
 
         System.out.print("Enter the ID of the robot you need: ");
         String robotId = sc.next();
-
-        Client client = Client.create();
 
         System.out.println("Enter the number of PM you need: ");
         int n = sc.nextInt();
@@ -66,6 +64,7 @@ public class AdministratorClient {
         ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
 
         if (response.getStatus() == 200) {
+
             Gson gson = new Gson();
             String responseBody = response.getEntity(String.class);
             double lastNPollution = gson.fromJson(responseBody, Double.class);
@@ -76,48 +75,6 @@ public class AdministratorClient {
         }
     }
 
-    /*private static void getLastNAvg() {
-        Scanner sc = new Scanner(System.in);
-
-        WebResource webResource = client.resource(restAddressStatistic + "/get");
-        ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
-
-        if (response.getStatus() == 200) {
-            try {
-                Gson gson = new Gson();
-                Type mapType = new TypeToken<HashMap<String, ArrayList<Pollution>>>() {}.getType();
-                HashMap<String, ArrayList<Pollution>> pollutionMap = gson.fromJson(response.getEntity(String.class), mapType);
-
-                System.out.print("Enter the ID of the robot you need: ");
-                String robotId = sc.next();
-
-                ArrayList<Pollution> pollutionData = pollutionMap.get(robotId);
-
-                if (pollutionData != null) {
-                    System.out.print("Enter the number of pollution data you want: ");
-                    int n = sc.nextInt();
-
-                    if (pollutionData.size() >= n) {
-                        ArrayList<Pollution> lastNData = new ArrayList<>(pollutionData.subList(pollutionData.size() - n, pollutionData.size()));
-
-                        double avg = lastNData.stream().mapToDouble(Pollution::getPm_10).average().orElse(0.0);
-                        System.out.println("The average of the last " + n + " pm_10 of " + robotId + " is: " + avg);
-                    } else {
-                        System.out.println("Not enough data available for " + robotId);
-                    }
-                } else {
-                    System.out.println("No data available for " + robotId);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Error getting pollution data. Status code: " + response.getStatus());
-        }
-    }*/
-
-
-
     private static void getPollutionTimestamp() {
 
         System.out.print("\nEnter the start of timestamp that you need: ");
@@ -125,16 +82,21 @@ public class AdministratorClient {
         System.out.print("\nEnter the end of timestamp that you need: ");
         long t2 = sc.nextLong();
 
-        WebResource webResource = client.resource(restAddressStatistic + "/getTimestampPollution/" + t1 + "-" + t2);
+        WebResource webResource = client.resource(restAddressStatistic + "/get/timeP/" + t1 + "-" + t2);
         ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
 
-        try {
-            double avg = PollutionModels.getInstance().getAvgPollutionTimestamp(t1, t2);
-            System.out.println("\nThe average between: " + t1 + "-" + t2 + "is: " + avg);
-        } catch (Exception e) {
-            System.out.println(e);
+        if(response.getStatus() == 200){
+            try {
+                Gson gson = new Gson();
+                String responseBody = response.getEntity(String.class);
+                double lastTPollution = gson.fromJson(responseBody, Double.class);
+                System.out.println("\nThe average between\nt1: " + t1 + "\nt2: " + t2 + "\n= " + lastTPollution);
+            } catch (Exception e) {
+                System.out.println(e);
 
+            }
         }
+
 
     }
 

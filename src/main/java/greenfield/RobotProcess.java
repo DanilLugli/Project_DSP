@@ -98,6 +98,9 @@ public class RobotProcess {
             //GRPC Alive - THREAD
             sendGrpcRequestToAllRobots();
 
+            //Request Mechanic - THREAD
+            requestMechanic();
+
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -195,10 +198,8 @@ public class RobotProcess {
                     Scanner scanner = new Scanner(System.in);
                     String input = scanner.next();
 
-
                     //Write into command line that i want to leave
                     if (input.equals("exit")) {
-                        //I'll notify the exit to all the other alive robots
 
                         for (Robot r : robotArrayList) {
                             if (robotArrayList.size() >= 1 && !r.getID().equals(robotId)) {
@@ -280,6 +281,35 @@ public class RobotProcess {
 
         grpcRequestThread.start();
     }
+
+    private static void requestMechanic(){
+
+        //QUESTO LO FANNO TUTTI BISOGNA FARLO COME THREAD CON MUTUA ESCLUSIONE
+        Thread mechanicThread = new Thread(() -> {
+            try {
+                ModelRobot modelRobot = ModelRobot.getInstance();
+
+                while (true) {
+                    if (Math.random() <= 0.1) {
+                        modelRobot.requestMechanic();
+                        Thread.sleep(10000);
+                        modelRobot.releaseMechanic();
+                    }
+
+                    Thread.sleep(10000); // Attendere 10 secondi prima della prossima iterazione
+                }
+
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        });
+
+        mechanicThread.start();
+
+
+    }
+
+
 
 }
 

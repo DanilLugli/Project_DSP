@@ -7,7 +7,6 @@ import io.grpc.stub.StreamObserver;
 import proto.Grpc;
 import proto.RobotServiceGrpc;
 
-import javax.jws.WebParam;
 import java.util.ArrayList;
 
 public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
@@ -80,6 +79,10 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
 
     @Override
     public void balanceDistrict(Grpc.RobotBalanceRequest request, StreamObserver<Grpc.Empty> responseObserver){
+    }
 
+    @Override
+    public void requestMechanic(Grpc.RequestMechanicRequest request, StreamObserver<Grpc.RequestMechanicResponse> responseObserver) {
+        //super.requestMechanic(request, responseObserver);
     }
 }
