@@ -16,13 +16,15 @@ import simulators.PM10Simulator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
 
 public class RobotProcess {
+    static Robot robot;
     static String robotId;
     static int robotPort;
     static String robotIp;
     static ArrayList<Measurement> measurementList = new ArrayList<>();
-    static Robot robot;
+
 
     static Server server;
 
@@ -61,7 +63,7 @@ public class RobotProcess {
 
             if (result.getStatus() == 200) {
 
-                System.out.println("Hi, I'm "+ robotId);
+                System.out.println("<-- Hi, I'm "+ robotId + " -->");
 
                 coordRobot = result.getEntity(CoordRobot.class);
 
@@ -73,7 +75,7 @@ public class RobotProcess {
                     System.out.println("List of Robot is empty.");
                 } else {
                     ArrayList<Robot> l = modelRobot.getRobotArrayList();
-                    System.out.println("->There are " + l.size() + " alive robot:");
+                    System.out.println("\n->There are " + l.size() + " alive robot:");
                     for (Robot robot : l
                     ) {
                         if(robot.getID().equals(robotId)){
@@ -175,7 +177,6 @@ public class RobotProcess {
                     .build();
 
             server.start();
-            //System.out.println("Server GRPC of: " + robotId + " started on port: " + port + "\n");
 
             for (Robot r : coordRobot.getRobotsList()) {
                 if (coordRobot.getRobotsList().size() > 1 && !r.getID().equals(robot.getID())) {
@@ -223,8 +224,8 @@ public class RobotProcess {
                         String robotId = "";
 
                         //Delete robot from general list of robots
-                        if (ModelRobot.getInstance().getRobot().getID() != null)
-                            robotId = ModelRobot.getInstance().getRobot().getID();
+                        if (ModelRobot.getInstance().getCurrentRobot().getID() != null)
+                            robotId = ModelRobot.getInstance().getCurrentRobot().getID();
                         else System.out.println("null RobotID");
                         try {
                             Client client = Client.create();
@@ -284,21 +285,28 @@ public class RobotProcess {
 
     private static void requestMechanic(){
 
-        //QUESTO LO FANNO TUTTI BISOGNA FARLO COME THREAD CON MUTUA ESCLUSIONE
         Thread mechanicThread = new Thread(() -> {
             try {
                 ModelRobot modelRobot = ModelRobot.getInstance();
 
                 while (true) {
-                    if (Math.random() <= 0.1) {
-                        modelRobot.requestMechanic();
-                        Thread.sleep(10000);
-                        modelRobot.releaseMechanic();
+                    if (Math.random() <= 0.8) {  //Calculate the chance
+
+                        ArrayList<Robot> robotArrayList = ModelRobot.getInstance().getRobotArrayList();
+
+                        for (Robot r : robotArrayList) {
+                            if (!r.getID().equals(robot.getID())) {
+                                try {
+                                    RequestMechanic requestMechanic = new RequestMechanic( ModelRobot.getInstance().getCurrentRobot(),r, mechanicLatch);
+                                    requestMechanic.start();
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                }
+                            }
+                        }
                     }
-
-                    Thread.sleep(10000); // Attendere 10 secondi prima della prossima iterazione
+                    Thread.sleep(10000); //Every 10 seconds could be the chance
                 }
-
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -308,8 +316,6 @@ public class RobotProcess {
 
 
     }
-
-
 
 }
 

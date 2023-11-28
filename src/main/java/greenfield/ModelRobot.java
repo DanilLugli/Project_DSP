@@ -1,17 +1,34 @@
 package greenfield;
-import beans.Robot;
-import beans.RobotModels;
 
-import javax.xml.bind.annotation.XmlElement;
+import beans.Robot;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 
 @XmlRootElement
 public class ModelRobot {
 
+    public BlockingQueue<String> getMechanicQueue() {
+        return mechanicQueue;
+    }
+
+    private final BlockingQueue<String> mechanicQueue = new LinkedBlockingQueue<>();
+
     private Robot robot;
+
+    public boolean getMechanic() {
+        return mechanic;
+    }
+
+    public void setMechanic(boolean mechanic) {
+        this.mechanic = mechanic;
+    }
+
     private boolean mechanic = false;
+
 
     private ArrayList<Robot> robotArrayList;
     private static ModelRobot instance;
@@ -34,7 +51,7 @@ public class ModelRobot {
         this.robotArrayList = new ArrayList<>();
     }
 
-    public Robot getRobot() {
+    public Robot getCurrentRobot() {
         return this.robot;
     }
 
@@ -57,16 +74,16 @@ public class ModelRobot {
         }
     }
 
-    public synchronized void requestMechanic() throws InterruptedException {
-        while (mechanic) {
-            wait();
-        }
-        mechanic = true;
+
+
+    public synchronized void requestMechanic(String robotID){
+        this.mechanic = true;
+        //System.out.println("Mechanic is TRUE: " + robotID );
     }
 
-    public synchronized void releaseMechanic() {
-        mechanic = false;
-        notifyAll();
+    public synchronized void releaseMechanic(String robotID) {
+        this.mechanic = false;
+        //System.out.println("Mechanic is FALSE: " + robotID);
     }
 
 }

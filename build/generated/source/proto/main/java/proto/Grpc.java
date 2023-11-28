@@ -4321,16 +4321,16 @@ public final class Grpc {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>string requesterId = 1;</code>
-     * @return The requesterId.
+     * <code>string robotId = 1;</code>
+     * @return The robotId.
      */
-    java.lang.String getRequesterId();
+    java.lang.String getRobotId();
     /**
-     * <code>string requesterId = 1;</code>
-     * @return The bytes for requesterId.
+     * <code>string robotId = 1;</code>
+     * @return The bytes for robotId.
      */
     com.google.protobuf.ByteString
-        getRequesterIdBytes();
+        getRobotIdBytes();
   }
   /**
    * Protobuf type {@code proto.RequestMechanicRequest}
@@ -4345,7 +4345,7 @@ public final class Grpc {
       super(builder);
     }
     private RequestMechanicRequest() {
-      requesterId_ = "";
+      robotId_ = "";
     }
 
     @java.lang.Override
@@ -4381,7 +4381,7 @@ public final class Grpc {
             case 10: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              requesterId_ = s;
+              robotId_ = s;
               break;
             }
             default: {
@@ -4416,36 +4416,36 @@ public final class Grpc {
               proto.Grpc.RequestMechanicRequest.class, proto.Grpc.RequestMechanicRequest.Builder.class);
     }
 
-    public static final int REQUESTERID_FIELD_NUMBER = 1;
-    private volatile java.lang.Object requesterId_;
+    public static final int ROBOTID_FIELD_NUMBER = 1;
+    private volatile java.lang.Object robotId_;
     /**
-     * <code>string requesterId = 1;</code>
-     * @return The requesterId.
+     * <code>string robotId = 1;</code>
+     * @return The robotId.
      */
-    public java.lang.String getRequesterId() {
-      java.lang.Object ref = requesterId_;
+    public java.lang.String getRobotId() {
+      java.lang.Object ref = robotId_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        requesterId_ = s;
+        robotId_ = s;
         return s;
       }
     }
     /**
-     * <code>string requesterId = 1;</code>
-     * @return The bytes for requesterId.
+     * <code>string robotId = 1;</code>
+     * @return The bytes for robotId.
      */
     public com.google.protobuf.ByteString
-        getRequesterIdBytes() {
-      java.lang.Object ref = requesterId_;
+        getRobotIdBytes() {
+      java.lang.Object ref = robotId_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        requesterId_ = b;
+        robotId_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -4466,8 +4466,8 @@ public final class Grpc {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!getRequesterIdBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, requesterId_);
+      if (!getRobotIdBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, robotId_);
       }
       unknownFields.writeTo(output);
     }
@@ -4478,8 +4478,8 @@ public final class Grpc {
       if (size != -1) return size;
 
       size = 0;
-      if (!getRequesterIdBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, requesterId_);
+      if (!getRobotIdBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, robotId_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -4496,8 +4496,8 @@ public final class Grpc {
       }
       proto.Grpc.RequestMechanicRequest other = (proto.Grpc.RequestMechanicRequest) obj;
 
-      if (!getRequesterId()
-          .equals(other.getRequesterId())) return false;
+      if (!getRobotId()
+          .equals(other.getRobotId())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -4509,8 +4509,8 @@ public final class Grpc {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + REQUESTERID_FIELD_NUMBER;
-      hash = (53 * hash) + getRequesterId().hashCode();
+      hash = (37 * hash) + ROBOTID_FIELD_NUMBER;
+      hash = (53 * hash) + getRobotId().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -4644,7 +4644,7 @@ public final class Grpc {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        requesterId_ = "";
+        robotId_ = "";
 
         return this;
       }
@@ -4672,7 +4672,7 @@ public final class Grpc {
       @java.lang.Override
       public proto.Grpc.RequestMechanicRequest buildPartial() {
         proto.Grpc.RequestMechanicRequest result = new proto.Grpc.RequestMechanicRequest(this);
-        result.requesterId_ = requesterId_;
+        result.robotId_ = robotId_;
         onBuilt();
         return result;
       }
@@ -4721,8 +4721,8 @@ public final class Grpc {
 
       public Builder mergeFrom(proto.Grpc.RequestMechanicRequest other) {
         if (other == proto.Grpc.RequestMechanicRequest.getDefaultInstance()) return this;
-        if (!other.getRequesterId().isEmpty()) {
-          requesterId_ = other.requesterId_;
+        if (!other.getRobotId().isEmpty()) {
+          robotId_ = other.robotId_;
           onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -4754,78 +4754,78 @@ public final class Grpc {
         return this;
       }
 
-      private java.lang.Object requesterId_ = "";
+      private java.lang.Object robotId_ = "";
       /**
-       * <code>string requesterId = 1;</code>
-       * @return The requesterId.
+       * <code>string robotId = 1;</code>
+       * @return The robotId.
        */
-      public java.lang.String getRequesterId() {
-        java.lang.Object ref = requesterId_;
+      public java.lang.String getRobotId() {
+        java.lang.Object ref = robotId_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          requesterId_ = s;
+          robotId_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string requesterId = 1;</code>
-       * @return The bytes for requesterId.
+       * <code>string robotId = 1;</code>
+       * @return The bytes for robotId.
        */
       public com.google.protobuf.ByteString
-          getRequesterIdBytes() {
-        java.lang.Object ref = requesterId_;
+          getRobotIdBytes() {
+        java.lang.Object ref = robotId_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          requesterId_ = b;
+          robotId_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>string requesterId = 1;</code>
-       * @param value The requesterId to set.
+       * <code>string robotId = 1;</code>
+       * @param value The robotId to set.
        * @return This builder for chaining.
        */
-      public Builder setRequesterId(
+      public Builder setRobotId(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        requesterId_ = value;
+        robotId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string requesterId = 1;</code>
+       * <code>string robotId = 1;</code>
        * @return This builder for chaining.
        */
-      public Builder clearRequesterId() {
+      public Builder clearRobotId() {
         
-        requesterId_ = getDefaultInstance().getRequesterId();
+        robotId_ = getDefaultInstance().getRobotId();
         onChanged();
         return this;
       }
       /**
-       * <code>string requesterId = 1;</code>
-       * @param value The bytes for requesterId to set.
+       * <code>string robotId = 1;</code>
+       * @param value The bytes for robotId to set.
        * @return This builder for chaining.
        */
-      public Builder setRequesterIdBytes(
+      public Builder setRobotIdBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        requesterId_ = value;
+        robotId_ = value;
         onChanged();
         return this;
       }
@@ -5510,18 +5510,18 @@ public final class Grpc {
       "botId\030\001 \001(\t\" \n\021RobotAliveRequest\022\013\n\003ack\030" +
       "\001 \001(\t\"!\n\022RobotAliveResponse\022\013\n\003msg\030\001 \001(\t" +
       "\"8\n\023RobotBalanceRequest\022\017\n\007robotId\030\001 \001(\t" +
-      "\022\020\n\010district\030\002 \001(\005\"-\n\026RequestMechanicReq" +
-      "uest\022\023\n\013requesterId\030\001 \001(\t\"(\n\027RequestMech" +
-      "anicResponse\022\r\n\005reply\030\001 \001(\t2\330\002\n\014RobotSer" +
-      "vice\0220\n\016NotifyNewRobot\022\020.proto.RobotInfo" +
-      "\032\014.proto.Empty\022D\n\013removeRobot\022\031.proto.Re" +
-      "moveRobotRequest\032\032.proto.RemoveRobotResp" +
-      "onse\022A\n\nRobotAlive\022\030.proto.RobotAliveReq" +
-      "uest\032\031.proto.RobotAliveResponse\022;\n\017Balan" +
-      "ceDistrict\022\032.proto.RobotBalanceRequest\032\014" +
-      ".proto.Empty\022P\n\017RequestMechanic\022\035.proto." +
-      "RequestMechanicRequest\032\036.proto.RequestMe" +
-      "chanicResponseb\006proto3"
+      "\022\020\n\010district\030\002 \001(\005\")\n\026RequestMechanicReq" +
+      "uest\022\017\n\007robotId\030\001 \001(\t\"(\n\027RequestMechanic" +
+      "Response\022\r\n\005reply\030\001 \001(\t2\330\002\n\014RobotService" +
+      "\0220\n\016NotifyNewRobot\022\020.proto.RobotInfo\032\014.p" +
+      "roto.Empty\022D\n\013removeRobot\022\031.proto.Remove" +
+      "RobotRequest\032\032.proto.RemoveRobotResponse" +
+      "\022A\n\nRobotAlive\022\030.proto.RobotAliveRequest" +
+      "\032\031.proto.RobotAliveResponse\022;\n\017BalanceDi" +
+      "strict\022\032.proto.RobotBalanceRequest\032\014.pro" +
+      "to.Empty\022P\n\017RequestMechanic\022\035.proto.Requ" +
+      "estMechanicRequest\032\036.proto.RequestMechan" +
+      "icResponseb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -5574,7 +5574,7 @@ public final class Grpc {
     internal_static_proto_RequestMechanicRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RequestMechanicRequest_descriptor,
-        new java.lang.String[] { "RequesterId", });
+        new java.lang.String[] { "RobotId", });
     internal_static_proto_RequestMechanicResponse_descriptor =
       getDescriptor().getMessageTypes().get(8);
     internal_static_proto_RequestMechanicResponse_fieldAccessorTable = new

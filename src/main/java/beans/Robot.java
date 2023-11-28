@@ -1,6 +1,6 @@
 package beans;
+
 import com.google.gson.annotations.SerializedName;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,6 +21,10 @@ public class Robot {
     private Position pos;
 
     private int district;
+
+
+
+    private boolean waitingForMechanic = false;
 
     public Robot(){}
 
@@ -64,6 +68,14 @@ public class Robot {
 
     public void setPos(Position pos) {
         this.pos = pos;
+    }
+
+    public boolean isWaitingForMechanic() {
+        return waitingForMechanic;
+    }
+
+    public void setWaitingForMechanic(boolean waitingForMechanic) {
+        this.waitingForMechanic = waitingForMechanic;
     }
 
     @Override

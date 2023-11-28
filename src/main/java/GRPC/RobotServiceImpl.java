@@ -8,8 +8,11 @@ import proto.Grpc;
 import proto.RobotServiceGrpc;
 
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
+
+    private final CountDownLatch mechanicLatch = new CountDownLatch(1);
 
     @Override
     public void notifyNewRobot(Grpc.RobotInfo request, StreamObserver<Grpc.Empty> responseObserver) {
@@ -41,9 +44,9 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
     }
 
     @Override
-    public void removeRobot(Grpc.RemoveRobotRequest request, StreamObserver<Grpc.RemoveRobotResponse> responseObserver){
+    public void removeRobot(Grpc.RemoveRobotRequest request, StreamObserver<Grpc.RemoveRobotResponse> responseObserver) {
         String robotId = request.getRobotId();
-        if(ModelRobot.getInstance() != null){
+        if (ModelRobot.getInstance() != null) {
             ModelRobot.getInstance().removeRobotById(robotId);
             System.out.println("I've just deleted: " + robotId);
             System.out.println("\nNow there are: ");
@@ -51,8 +54,7 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
             ) {
                 System.out.println(robot.getID());
             }
-        }
-        else{
+        } else {
             System.out.println("ModelRobot instance null");
         }
 
@@ -68,7 +70,7 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
     @Override
     public void robotAlive(Grpc.RobotAliveRequest request, StreamObserver<Grpc.RobotAliveResponse> responseObserver) {
 
-        String ack = request.getAck();
+        //String ack = request.getAck();
         Grpc.RobotAliveResponse response = Grpc.RobotAliveResponse.newBuilder()
                 .setMsg("OK!")
                 .build();
@@ -78,11 +80,48 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
     }
 
     @Override
-    public void balanceDistrict(Grpc.RobotBalanceRequest request, StreamObserver<Grpc.Empty> responseObserver){
+    public void balanceDistrict(Grpc.RobotBalanceRequest request, StreamObserver<Grpc.Empty> responseObserver) {
     }
 
     @Override
     public void requestMechanic(Grpc.RequestMechanicRequest request, StreamObserver<Grpc.RequestMechanicResponse> responseObserver) {
-        //super.requestMechanic(request, responseObserver);
+        try {
+            String robotIDRequest = request.getRobotId();
+
+            // Aggiungi il thread corrente alla coda
+            synchronized (this) {
+                ModelRobot.getInstance().getMechanicQueue().offer(robotIDRequest);
+            }
+
+            String currentId;
+            synchronized (this) {
+                currentId = ModelRobot.getInstance().getMechanicQueue().poll();
+            }
+
+            if (currentId.equals(robotIDRequest) && !ModelRobot.getInstance().getMechanic()) {
+
+                ModelRobot.getInstance().requestMechanic(currentId.toString());
+                System.out.println("\nRobot " + currentId + " sta ricevendo assistenza meccanica...");
+                Thread.sleep(250000);
+                System.out.println("Robot " + currentId + " ha ricevuto assistenza meccanica.");
+                ModelRobot.getInstance().releaseMechanic(currentId.toString());
+
+                mechanicLatch.countDown();
+
+                Grpc.RequestMechanicResponse response = Grpc.RequestMechanicResponse.newBuilder()
+                        .setReply("OK")
+                        .build();
+
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+            } else {
+                System.out.println("\nRobot " + robotIDRequest + " è in attesa del suo turno per l'assistenza meccanica...");
+                responseObserver.onNext(Grpc.RequestMechanicResponse.newBuilder().setReply("In attesa del tuo turno...").build());
+                responseObserver.onCompleted();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
+

@@ -37,7 +37,7 @@ message RobotBalanceRequest {
 }
 
 message RequestMechanicRequest {
-  string requesterId = 1;
+  string robotId = 1;
 }
 
 message RequestMechanicResponse {

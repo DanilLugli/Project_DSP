@@ -18,7 +18,7 @@ public class RemoveRobot extends Thread {
 
     public void run() {
 
-        String myRobotId = ModelRobot.getInstance().getRobot().getID();
+        String myRobotId = ModelRobot.getInstance().getCurrentRobot().getID();
 
         if (myRobotId != null) {
             final ManagedChannel channel = ManagedChannelBuilder.forTarget(r.getIP() + ":" + r.getPort())
