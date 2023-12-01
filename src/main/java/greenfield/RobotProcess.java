@@ -1,22 +1,26 @@
 package greenfield;
 
-import GRPC.*;
+import GRPC.NotifyNewRobot;
+import GRPC.RemoveRobot;
+import GRPC.RobotAlive;
+import GRPC.RobotServiceImpl;
+import MQTT.MQTTClient;
 import beans.CoordRobot;
 import beans.Robot;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import MQTT.MQTTClient;
+import io.grpc.*;
+import proto.Grpc;
+import proto.RobotServiceGrpc;
 import simulators.BufferImpl;
 import simulators.Measurement;
 import simulators.PM10Simulator;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
-import java.util.concurrent.CountDownLatch;
 
 public class RobotProcess {
     static Robot robot;
@@ -287,25 +291,85 @@ public class RobotProcess {
 
         Thread mechanicThread = new Thread(() -> {
             try {
-                ModelRobot modelRobot = ModelRobot.getInstance();
-
                 while (true) {
-                    if (Math.random() <= 0.8) {  //Calculate the chance
+                    if (Math.random() <= 0.5) {  //Calculate the chance
+
+                        Date date = new Date();
+                        long timestamp = date.getTime();
+
+                        Robot myRobot = ModelRobot.getInstance().getCurrentRobot();
+                        myRobot.setRequestMechanic(true);
+
+                        int countMechanic = 0;
 
                         ArrayList<Robot> robotArrayList = ModelRobot.getInstance().getRobotArrayList();
 
+                        System.out.println("\nFaccio richiesta per il meccanico!!!");
                         for (Robot r : robotArrayList) {
                             if (!r.getID().equals(robot.getID())) {
                                 try {
-                                    RequestMechanic requestMechanic = new RequestMechanic( ModelRobot.getInstance().getCurrentRobot(),r, mechanicLatch);
-                                    requestMechanic.start();
+
+                                    String myRobotId = myRobot.getID();
+                                    if (myRobotId != null) {
+                                        try {
+                                            final ManagedChannel channel = ManagedChannelBuilder.forTarget(r.getIP() + ":" + r.getPort())
+                                                    .usePlaintext()
+                                                    .build();
+
+                                            RobotServiceGrpc.RobotServiceBlockingStub stub = RobotServiceGrpc.newBlockingStub(channel);
+                                            Grpc.RequestMechanicRequest request = Grpc.RequestMechanicRequest.newBuilder()
+                                                    .setRobotId(myRobotId)
+                                                    .setTimestamp(timestamp)
+                                                    .build();
+
+                                            Grpc.RequestMechanicResponse response;
+
+                                            try {
+
+                                                response = stub.requestMechanic(request);
+                                                if(response.getReply().equals("OK")){ countMechanic++; }
+                                                System.out.println("Response: " + r.getID() + ": " + response.getReply());
+
+                                            } catch (StatusRuntimeException e) {
+                                                System.out.println("Error communicating with " + r.getID() + ": " + e.getStatus());
+                                            } catch (Exception e) {
+                                                System.out.println("Unexpected error: " + e);
+                                            }
+
+                                            channel.shutdownNow();
+                                        } catch (Exception e) {
+                                            System.out.println(e);
+                                        }
+                                    } else {
+                                        System.out.println("ERROR: myRobot is null.");
+                                    }
                                 } catch (Exception e) {
                                     System.out.println(e);
                                 }
                             }
                         }
+
+                        if(countMechanic == (ModelRobot.getInstance().getRobotArrayList().size()-1)){
+
+                            myRobot.setRequestMechanic(false);
+
+                            System.out.println("\nSTO RICEVENDO ASSISTENZA!");
+                            myRobot.setRobotRepairing(true);
+
+                            Thread.sleep(10000);
+
+                            myRobot.setRobotRepairing(false);
+                            System.out.println("HO FINITO DI RICEVERE ASSISTENZA\n");
+
+                        }
+
+                        synchronized (ModelRobot.getInstance().getChargeBatteryLock()) {
+                            ModelRobot.getInstance().getChargeBatteryLock().notifyAll();
+                        }
+
                     }
                     Thread.sleep(10000); //Every 10 seconds could be the chance
+
                 }
             } catch (Exception e) {
                 System.out.println(e);

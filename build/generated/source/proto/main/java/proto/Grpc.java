@@ -4331,6 +4331,12 @@ public final class Grpc {
      */
     com.google.protobuf.ByteString
         getRobotIdBytes();
+
+    /**
+     * <code>int64 timestamp = 2;</code>
+     * @return The timestamp.
+     */
+    long getTimestamp();
   }
   /**
    * Protobuf type {@code proto.RequestMechanicRequest}
@@ -4382,6 +4388,11 @@ public final class Grpc {
               java.lang.String s = input.readStringRequireUtf8();
 
               robotId_ = s;
+              break;
+            }
+            case 16: {
+
+              timestamp_ = input.readInt64();
               break;
             }
             default: {
@@ -4452,6 +4463,16 @@ public final class Grpc {
       }
     }
 
+    public static final int TIMESTAMP_FIELD_NUMBER = 2;
+    private long timestamp_;
+    /**
+     * <code>int64 timestamp = 2;</code>
+     * @return The timestamp.
+     */
+    public long getTimestamp() {
+      return timestamp_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -4469,6 +4490,9 @@ public final class Grpc {
       if (!getRobotIdBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, robotId_);
       }
+      if (timestamp_ != 0L) {
+        output.writeInt64(2, timestamp_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -4480,6 +4504,10 @@ public final class Grpc {
       size = 0;
       if (!getRobotIdBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, robotId_);
+      }
+      if (timestamp_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(2, timestamp_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -4498,6 +4526,8 @@ public final class Grpc {
 
       if (!getRobotId()
           .equals(other.getRobotId())) return false;
+      if (getTimestamp()
+          != other.getTimestamp()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -4511,6 +4541,9 @@ public final class Grpc {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + ROBOTID_FIELD_NUMBER;
       hash = (53 * hash) + getRobotId().hashCode();
+      hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getTimestamp());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -4646,6 +4679,8 @@ public final class Grpc {
         super.clear();
         robotId_ = "";
 
+        timestamp_ = 0L;
+
         return this;
       }
 
@@ -4673,6 +4708,7 @@ public final class Grpc {
       public proto.Grpc.RequestMechanicRequest buildPartial() {
         proto.Grpc.RequestMechanicRequest result = new proto.Grpc.RequestMechanicRequest(this);
         result.robotId_ = robotId_;
+        result.timestamp_ = timestamp_;
         onBuilt();
         return result;
       }
@@ -4724,6 +4760,9 @@ public final class Grpc {
         if (!other.getRobotId().isEmpty()) {
           robotId_ = other.robotId_;
           onChanged();
+        }
+        if (other.getTimestamp() != 0L) {
+          setTimestamp(other.getTimestamp());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -4826,6 +4865,36 @@ public final class Grpc {
   checkByteStringIsUtf8(value);
         
         robotId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private long timestamp_ ;
+      /**
+       * <code>int64 timestamp = 2;</code>
+       * @return The timestamp.
+       */
+      public long getTimestamp() {
+        return timestamp_;
+      }
+      /**
+       * <code>int64 timestamp = 2;</code>
+       * @param value The timestamp to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTimestamp(long value) {
+        
+        timestamp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 timestamp = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTimestamp() {
+        
+        timestamp_ = 0L;
         onChanged();
         return this;
       }
@@ -5510,18 +5579,18 @@ public final class Grpc {
       "botId\030\001 \001(\t\" \n\021RobotAliveRequest\022\013\n\003ack\030" +
       "\001 \001(\t\"!\n\022RobotAliveResponse\022\013\n\003msg\030\001 \001(\t" +
       "\"8\n\023RobotBalanceRequest\022\017\n\007robotId\030\001 \001(\t" +
-      "\022\020\n\010district\030\002 \001(\005\")\n\026RequestMechanicReq" +
-      "uest\022\017\n\007robotId\030\001 \001(\t\"(\n\027RequestMechanic" +
-      "Response\022\r\n\005reply\030\001 \001(\t2\330\002\n\014RobotService" +
-      "\0220\n\016NotifyNewRobot\022\020.proto.RobotInfo\032\014.p" +
-      "roto.Empty\022D\n\013removeRobot\022\031.proto.Remove" +
-      "RobotRequest\032\032.proto.RemoveRobotResponse" +
-      "\022A\n\nRobotAlive\022\030.proto.RobotAliveRequest" +
-      "\032\031.proto.RobotAliveResponse\022;\n\017BalanceDi" +
-      "strict\022\032.proto.RobotBalanceRequest\032\014.pro" +
-      "to.Empty\022P\n\017RequestMechanic\022\035.proto.Requ" +
-      "estMechanicRequest\032\036.proto.RequestMechan" +
-      "icResponseb\006proto3"
+      "\022\020\n\010district\030\002 \001(\005\"<\n\026RequestMechanicReq" +
+      "uest\022\017\n\007robotId\030\001 \001(\t\022\021\n\ttimestamp\030\002 \001(\003" +
+      "\"(\n\027RequestMechanicResponse\022\r\n\005reply\030\001 \001" +
+      "(\t2\330\002\n\014RobotService\0220\n\016NotifyNewRobot\022\020." +
+      "proto.RobotInfo\032\014.proto.Empty\022D\n\013removeR" +
+      "obot\022\031.proto.RemoveRobotRequest\032\032.proto." +
+      "RemoveRobotResponse\022A\n\nRobotAlive\022\030.prot" +
+      "o.RobotAliveRequest\032\031.proto.RobotAliveRe" +
+      "sponse\022;\n\017BalanceDistrict\022\032.proto.RobotB" +
+      "alanceRequest\032\014.proto.Empty\022P\n\017RequestMe" +
+      "chanic\022\035.proto.RequestMechanicRequest\032\036." +
+      "proto.RequestMechanicResponseb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -5574,7 +5643,7 @@ public final class Grpc {
     internal_static_proto_RequestMechanicRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RequestMechanicRequest_descriptor,
-        new java.lang.String[] { "RobotId", });
+        new java.lang.String[] { "RobotId", "Timestamp", });
     internal_static_proto_RequestMechanicResponse_descriptor =
       getDescriptor().getMessageTypes().get(8);
     internal_static_proto_RequestMechanicResponse_fieldAccessorTable = new

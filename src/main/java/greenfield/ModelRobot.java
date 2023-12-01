@@ -4,21 +4,15 @@ import beans.Robot;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 
 @XmlRootElement
 public class ModelRobot {
 
-    public BlockingQueue<String> getMechanicQueue() {
-        return mechanicQueue;
-    }
-
-    private final BlockingQueue<String> mechanicQueue = new LinkedBlockingQueue<>();
-
     private Robot robot;
+    private ArrayList<Robot> robotArrayList;
 
+    private boolean mechanic = false;
     public boolean getMechanic() {
         return mechanic;
     }
@@ -27,10 +21,17 @@ public class ModelRobot {
         this.mechanic = mechanic;
     }
 
-    private boolean mechanic = false;
+    private Object chargeBatteryLock = new Object();
+
+    public Object getChargeBatteryLock() {
+        return chargeBatteryLock;
+    }
+
+    public void setChargeBatteryLock(Object chargeBatteryLock) {
+        this.chargeBatteryLock = chargeBatteryLock;
+    }
 
 
-    private ArrayList<Robot> robotArrayList;
     private static ModelRobot instance;
 
     public static ModelRobot getInstance() {
@@ -39,7 +40,6 @@ public class ModelRobot {
         }
         return instance;
     }
-
 
     public ModelRobot() {
         this.robot = null;
@@ -74,16 +74,12 @@ public class ModelRobot {
         }
     }
 
-
-
-    public synchronized void requestMechanic(String robotID){
+    public synchronized void requestMechanic(){
         this.mechanic = true;
-        //System.out.println("Mechanic is TRUE: " + robotID );
     }
 
-    public synchronized void releaseMechanic(String robotID) {
+    public synchronized void releaseMechanic() {
         this.mechanic = false;
-        //System.out.println("Mechanic is FALSE: " + robotID);
     }
 
 }

@@ -23,8 +23,27 @@ public class Robot {
     private int district;
 
 
+    //Sono dal meccanico
+    private boolean robotRepairing;
 
-    private boolean waitingForMechanic = false;
+    //Sono interessato al meccanico
+    private boolean requestMechanic;
+
+    public boolean getRequestMechanic() {
+        return requestMechanic;
+    }
+
+    public void setRequestMechanic(boolean requestMechanic) {
+        this.requestMechanic = requestMechanic;
+    }
+
+    public boolean getRobotRepairing() {
+        return robotRepairing;
+    }
+
+    public void setRobotRepairing(boolean robotRepairing) {
+        this.robotRepairing = robotRepairing;
+    }
 
     public Robot(){}
 
@@ -68,14 +87,6 @@ public class Robot {
 
     public void setPos(Position pos) {
         this.pos = pos;
-    }
-
-    public boolean isWaitingForMechanic() {
-        return waitingForMechanic;
-    }
-
-    public void setWaitingForMechanic(boolean waitingForMechanic) {
-        this.waitingForMechanic = waitingForMechanic;
     }
 
     @Override

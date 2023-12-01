@@ -8,11 +8,9 @@ import proto.Grpc;
 import proto.RobotServiceGrpc;
 
 import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
+import java.util.Date;
 
 public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
-
-    private final CountDownLatch mechanicLatch = new CountDownLatch(1);
 
     @Override
     public void notifyNewRobot(Grpc.RobotInfo request, StreamObserver<Grpc.Empty> responseObserver) {
@@ -85,43 +83,43 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
 
     @Override
     public void requestMechanic(Grpc.RequestMechanicRequest request, StreamObserver<Grpc.RequestMechanicResponse> responseObserver) {
-        try {
-            String robotIDRequest = request.getRobotId();
 
-            // Aggiungi il thread corrente alla coda
-            synchronized (this) {
-                ModelRobot.getInstance().getMechanicQueue().offer(robotIDRequest);
-            }
+        long requestTimestamp = request.getTimestamp();
+        Date date = new Date();
+        long robotTimestamp = date.getTime();
 
-            String currentId;
-            synchronized (this) {
-                currentId = ModelRobot.getInstance().getMechanicQueue().poll();
-            }
+        Grpc.RequestMechanicResponse response;
 
-            if (currentId.equals(robotIDRequest) && !ModelRobot.getInstance().getMechanic()) {
-
-                ModelRobot.getInstance().requestMechanic(currentId.toString());
-                System.out.println("\nRobot " + currentId + " sta ricevendo assistenza meccanica...");
-                Thread.sleep(250000);
-                System.out.println("Robot " + currentId + " ha ricevuto assistenza meccanica.");
-                ModelRobot.getInstance().releaseMechanic(currentId.toString());
-
-                mechanicLatch.countDown();
-
-                Grpc.RequestMechanicResponse response = Grpc.RequestMechanicResponse.newBuilder()
-                        .setReply("OK")
-                        .build();
-
-                responseObserver.onNext(response);
-                responseObserver.onCompleted();
+        if (ModelRobot.getInstance().getCurrentRobot().getRobotRepairing() || ModelRobot.getInstance().getCurrentRobot().getRequestMechanic()) {
+            if (ModelRobot.getInstance().getCurrentRobot().getRequestMechanic()) {
+                if (robotTimestamp < requestTimestamp) {
+                    synchronized (ModelRobot.getInstance().getChargeBatteryLock()) {
+                        try {
+                            System.out.println("\n" + request.getRobotId() + " aspetta!");
+                            ModelRobot.getInstance().getChargeBatteryLock().wait();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
             } else {
-                System.out.println("\nRobot " + robotIDRequest + " è in attesa del suo turno per l'assistenza meccanica...");
-                responseObserver.onNext(Grpc.RequestMechanicResponse.newBuilder().setReply("In attesa del tuo turno...").build());
-                responseObserver.onCompleted();
+                synchronized (ModelRobot.getInstance().getChargeBatteryLock()) {
+                    try {
+                        System.out.println("\nIo " + ModelRobot.getInstance().getCurrentRobot().getID() + " sono dal meccanico. " + request.getRobotId() + " attendi il tuo turno.");
+                        ModelRobot.getInstance().getChargeBatteryLock().wait();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
+        response = Grpc.RequestMechanicResponse
+                .newBuilder()
+                .setReply("OK")
+                .build();
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
     }
 }
 
