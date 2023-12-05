@@ -9,8 +9,8 @@ proto/RobotServiceGrpc.java
  proto.RobotServiceGrpc$RobotServiceImplBase
  proto.RobotServiceGrpc$RobotServiceMethodDescriptorSupplier
  proto.RobotServiceGrpc$RobotServiceStub
-GRPC/RobotAlive.java
- GRPC.RobotAlive
+simulators/Measurement.java
+ simulators.Measurement
 simulators/Buffer.java
  simulators.Buffer
 AdministratorClient.java
@@ -23,6 +23,7 @@ services/RobotRequest.java
  services.RobotRequest
 greenfield/ModelRobot.java
  greenfield.ModelRobot
+ greenfield.ModelRobot$1
 GRPC/RemoveRobot.java
  GRPC.RemoveRobot
 GRPC/RequestMechanic.java
@@ -40,8 +41,8 @@ beans/RobotModels.java
  beans.RobotModels
 services/PollutionRequest.java
  services.PollutionRequest
-simulators/Measurement.java
- simulators.Measurement
+beans/Robot.java
+ beans.Robot
 beans/Pollution.java
  beans.Pollution
 proto/Grpc.java
@@ -83,6 +84,10 @@ proto/Grpc.java
  proto.Grpc$RobotInfo$1
  proto.Grpc$RobotInfo$Builder
  proto.Grpc$RobotInfoOrBuilder
+ proto.Grpc$RobotResponse
+ proto.Grpc$RobotResponse$1
+ proto.Grpc$RobotResponse$Builder
+ proto.Grpc$RobotResponseOrBuilder
 MQTT/MQTTClient.java
  MQTT.MQTTClient
 simulators/BufferImpl.java
@@ -93,9 +98,9 @@ simulators/PM10Simulator.java
  simulators.PM10Simulator
 beans/PollutionModels.java
  beans.PollutionModels
-beans/Robot.java
- beans.Robot
-greenfield/RobotProcess.java
- greenfield.RobotProcess
 GRPC/RobotServiceImpl.java
  GRPC.RobotServiceImpl
+greenfield/RobotProcess.java
+ greenfield.RobotProcess
+GRPC/RobotAlive.java
+ GRPC.RobotAlive

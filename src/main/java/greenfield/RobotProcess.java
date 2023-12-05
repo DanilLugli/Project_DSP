@@ -67,13 +67,17 @@ public class RobotProcess {
 
             if (result.getStatus() == 200) {
 
-                System.out.println("<-- Hi, I'm "+ robotId + " -->");
-
                 coordRobot = result.getEntity(CoordRobot.class);
+
+                robot.setDistrict(coordRobot.getDistrict());
+
+                System.out.println("<-- Hi, I'm "+ robotId + " -->");
+                System.out.println("From: " + coordRobot.getDistrict());
 
                 ModelRobot modelRobot = ModelRobot.getInstance();
                 modelRobot.setRobot(robot);
                 modelRobot.setRobotArrayList(coordRobot.getRobotsList());
+                modelRobot.incrementValue(modelRobot.getDistrictMap(), robot.getDistrict());
 
                 if (modelRobot.getRobotArrayList().isEmpty()) {
                     System.out.println("List of Robot is empty.");
@@ -96,7 +100,7 @@ public class RobotProcess {
             sensorTake();
 
             //GRPC -> Start Server
-            startServerGrpcRobot();
+            notifyNew();
 
             //MQTT -> Send Pollution to topic - THREAD
             sensorSend();
@@ -171,7 +175,7 @@ public class RobotProcess {
         sendThread.start();
     }
 
-    private static void startServerGrpcRobot() throws IOException {
+    private static void notifyNew() throws IOException {
         try {
 
             int port = robot.getPort();
@@ -185,6 +189,7 @@ public class RobotProcess {
             for (Robot r : coordRobot.getRobotsList()) {
                 if (coordRobot.getRobotsList().size() > 1 && !r.getID().equals(robot.getID())) {
                     if (robot != null) {
+                        System.out.println("Robot inizio "+robot.getDistrict());
                         NotifyNewRobot n = new NotifyNewRobot(robot, r);
                         n.start();
                     }
@@ -208,9 +213,9 @@ public class RobotProcess {
 
                         for (Robot r : robotArrayList) {
                             if (robotArrayList.size() >= 1 && !r.getID().equals(robotId)) {
-                                RemoveRobot n = new RemoveRobot(robot, r);
+                                RemoveRobot removeRobot = new RemoveRobot(robot, r);
                                 System.out.println("Calling " + r.getID() + "at address: " + r.getIP() + ":" + r.getPort());
-                                n.start();
+                                removeRobot.start();
                             }
                         }
 
@@ -227,7 +232,7 @@ public class RobotProcess {
 
                         String robotId = "";
 
-                        //Delete robot from general list of robots
+                        //Delete robot from general list of robots and decrement district
                         if (ModelRobot.getInstance().getCurrentRobot().getID() != null)
                             robotId = ModelRobot.getInstance().getCurrentRobot().getID();
                         else System.out.println("null RobotID");
@@ -293,7 +298,6 @@ public class RobotProcess {
             try {
                 while (true) {
                     if (Math.random() <= 0.5) {  //Calculate the chance
-
                         Date date = new Date();
                         long timestamp = date.getTime();
 
@@ -304,7 +308,7 @@ public class RobotProcess {
 
                         ArrayList<Robot> robotArrayList = ModelRobot.getInstance().getRobotArrayList();
 
-                        System.out.println("\nFaccio richiesta per il meccanico!!!");
+                        System.out.println("\nFaccio richiesta per il meccanico...");
                         for (Robot r : robotArrayList) {
                             if (!r.getID().equals(robot.getID())) {
                                 try {
@@ -327,7 +331,10 @@ public class RobotProcess {
                                             try {
 
                                                 response = stub.requestMechanic(request);
-                                                if(response.getReply().equals("OK")){ countMechanic++; }
+
+                                                if(response.getReply().equals("OK")){
+                                                    countMechanic++;
+                                                }
                                                 System.out.println("Response: " + r.getID() + ": " + response.getReply());
 
                                             } catch (StatusRuntimeException e) {
@@ -353,18 +360,18 @@ public class RobotProcess {
 
                             myRobot.setRequestMechanic(false);
 
-                            System.out.println("\nSTO RICEVENDO ASSISTENZA!");
+                            System.out.println("\nSTO RICEVENDO ASSISTENZA...");
                             myRobot.setRobotRepairing(true);
 
                             Thread.sleep(10000);
 
                             myRobot.setRobotRepairing(false);
-                            System.out.println("HO FINITO DI RICEVERE ASSISTENZA\n");
+                            System.out.println("HO FINITO DI RICEVERE ASSISTENZA...\n");
 
                         }
 
-                        synchronized (ModelRobot.getInstance().getChargeBatteryLock()) {
-                            ModelRobot.getInstance().getChargeBatteryLock().notifyAll();
+                        synchronized (ModelRobot.getInstance().getMechanicLock()) {
+                            ModelRobot.getInstance().getMechanicLock().notifyAll();
                         }
 
                     }
@@ -375,10 +382,7 @@ public class RobotProcess {
                 System.out.println(e);
             }
         });
-
         mechanicThread.start();
-
-
     }
 
 }

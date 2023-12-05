@@ -27,7 +27,7 @@ public class BalanceDistrict extends Thread {
                 .build();
         try {
 
-            Grpc.Empty response = stub.notifyNewRobot(request);
+            Grpc.RobotResponse response = stub.notifyNewRobot(request);
 
         } catch (Exception e) {
             e.printStackTrace();

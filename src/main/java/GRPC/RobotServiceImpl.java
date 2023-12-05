@@ -13,7 +13,7 @@ import java.util.Date;
 public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
 
     @Override
-    public void notifyNewRobot(Grpc.RobotInfo request, StreamObserver<Grpc.Empty> responseObserver) {
+    public void notifyNewRobot(Grpc.RobotInfo request, StreamObserver<Grpc.RobotResponse> responseObserver) {
 
         Robot newRobot = new Robot();
 
@@ -27,31 +27,58 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
         if (ModelRobot.getInstance().getRobotArrayList() != null) {
             ArrayList<Robot> robotArrayList = ModelRobot.getInstance().getRobotArrayList();
             if (robotArrayList != null) {
-
+                ModelRobot.getInstance().incrementValue(ModelRobot.getInstance().getDistrictMap(), request.getDistrict());
                 robotArrayList.add(newRobot);
                 System.out.println("\n--> NEW Robot in greenfield: " + newRobot.getID() + ", added in my list.");
-                //System.out.println("Now there are these robot active in Greenfield: ");
+
             } else {
                 System.out.println("Robot ArrayList is null.");
             }
         } else {
             System.out.println("ModelRobot is null.");
         }
-        responseObserver.onNext(Grpc.Empty.getDefaultInstance());
+
+        Grpc.RobotResponse response = Grpc.RobotResponse
+                .newBuilder()
+                .setDistrict(ModelRobot.getInstance().getCurrentRobot().getDistrict())
+                .build();
+
+
+        System.out.println("SITUA DIS: ");
+        for (int n: ModelRobot.getInstance().getDistrictMap().values()
+        ) {
+            System.out.println(n);
+        }
+
+        responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 
     @Override
     public void removeRobot(Grpc.RemoveRobotRequest request, StreamObserver<Grpc.RemoveRobotResponse> responseObserver) {
+
         String robotId = request.getRobotId();
+
         if (ModelRobot.getInstance() != null) {
+
             ModelRobot.getInstance().removeRobotById(robotId);
+            ModelRobot.getInstance().decrementValue(ModelRobot.getInstance().getDistrictMap(), request.getDistrict());
+
             System.out.println("I've just deleted: " + robotId);
             System.out.println("\nNow there are: ");
+
             for (Robot robot : ModelRobot.getInstance().getRobotArrayList()
             ) {
                 System.out.println(robot.getID());
             }
+
+            System.out.println("SITUA DIS (AFTER): ");
+            for (int n: ModelRobot.getInstance().getDistrictMap().values()
+            ) {
+                System.out.println(n);
+            }
+
+
         } else {
             System.out.println("ModelRobot instance null");
         }
@@ -83,43 +110,42 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
 
     @Override
     public void requestMechanic(Grpc.RequestMechanicRequest request, StreamObserver<Grpc.RequestMechanicResponse> responseObserver) {
-
         long requestTimestamp = request.getTimestamp();
         Date date = new Date();
         long robotTimestamp = date.getTime();
 
         Grpc.RequestMechanicResponse response;
 
-        if (ModelRobot.getInstance().getCurrentRobot().getRobotRepairing() || ModelRobot.getInstance().getCurrentRobot().getRequestMechanic()) {
-            if (ModelRobot.getInstance().getCurrentRobot().getRequestMechanic()) {
-                if (robotTimestamp < requestTimestamp) {
-                    synchronized (ModelRobot.getInstance().getChargeBatteryLock()) {
-                        try {
-                            System.out.println("\n" + request.getRobotId() + " aspetta!");
-                            ModelRobot.getInstance().getChargeBatteryLock().wait();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+            if (!ModelRobot.getInstance().getCurrentRobot().getRobotRepairing()) {
+                response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
+            } else if (ModelRobot.getInstance().getCurrentRobot().getRequestMechanic()){
+                try {
+                    synchronized (ModelRobot.getInstance().getMechanicLock()){
+                        System.out.println("Attendi 222.");
+                        ModelRobot.getInstance().getMechanicLock().wait();
                     }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            } else {
-                synchronized (ModelRobot.getInstance().getChargeBatteryLock()) {
-                    try {
-                        System.out.println("\nIo " + ModelRobot.getInstance().getCurrentRobot().getID() + " sono dal meccanico. " + request.getRobotId() + " attendi il tuo turno.");
-                        ModelRobot.getInstance().getChargeBatteryLock().wait();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        response = Grpc.RequestMechanicResponse
-                .newBuilder()
-                .setReply("OK")
-                .build();
+                response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
 
+            } else if (ModelRobot.getInstance().getCurrentRobot().getRobotRepairing()) {
+                try {
+                    synchronized (ModelRobot.getInstance().getMechanicLock()){
+                    System.out.println("Attendi, la sto usando!");
+                    ModelRobot.getInstance().getMechanicLock().wait();}
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
+            } else {
+                response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
+            }
+
+        // Rispondi all'Observer
         responseObserver.onNext(response);
         responseObserver.onCompleted();
+        }
     }
-}
+
 

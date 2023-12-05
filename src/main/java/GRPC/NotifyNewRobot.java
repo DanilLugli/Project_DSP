@@ -36,12 +36,11 @@ public class NotifyNewRobot extends Thread{
                 .setDistrict(s.getDistrict())
                 .build();
         try {
-            Grpc.Empty response = stub.notifyNewRobot(request);
-            //for (Robot robot : ModelRobot.getInstance().getRobotArrayList()) {
-                //if (!s.getID().equals(robot.getID())) {
-                    //System.out.println("Robot " + s.getID() + " has contacted " + robot.getID());
-                //}
-            //}
+            Grpc.RobotResponse response = stub.notifyNewRobot(request);
+
+            int d = response.getDistrict();
+            ModelRobot.getInstance().incrementValue(ModelRobot.getInstance().getDistrictMap(), d);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

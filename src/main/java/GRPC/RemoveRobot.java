@@ -27,18 +27,19 @@ public class RemoveRobot extends Thread {
 
             RobotServiceGrpc.RobotServiceBlockingStub stub = RobotServiceGrpc.newBlockingStub(channel);
 
-            Grpc.RemoveRobotRequest request = Grpc.RemoveRobotRequest.newBuilder().setRobotId(myRobotId).build();
-            Grpc.RemoveRobotResponse response;
+            Grpc.RemoveRobotRequest request = Grpc.RemoveRobotRequest.newBuilder()
+                    .setRobotId(myRobotId)
+                    .setDistrict(s.getDistrict())
+                    .build();
 
             try {
-                response = stub.removeRobot(request);
+                Grpc.RemoveRobotResponse response = stub.removeRobot(request);
                 System.out.println("I've just send to :" + r.getID() + " my elimination.");
             } catch (Exception e) {
                 System.out.println("There's no communication with: " + r.getID());
             }
 
             channel.shutdownNow();
-
 
         } else {
             System.out.println("ERROR: myRobotId è null.");

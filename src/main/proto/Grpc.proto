@@ -12,8 +12,11 @@ message RobotInfo {
   int32 district = 6;
 
 }
-
 message Empty {}
+
+message RobotResponse {
+  int32 district = 1;
+}
 
 message RemoveRobotResponse {
   string reply = 1;
@@ -21,6 +24,7 @@ message RemoveRobotResponse {
 
 message RemoveRobotRequest {
   string robotId = 1;
+  int32 district = 2;
 }
 
 message RobotAliveRequest {
@@ -46,7 +50,7 @@ message RequestMechanicResponse {
 }
 
 service RobotService {
-  rpc NotifyNewRobot (RobotInfo) returns (Empty);
+  rpc NotifyNewRobot (RobotInfo) returns (RobotResponse);
   rpc removeRobot (RemoveRobotRequest) returns (RemoveRobotResponse);
   rpc RobotAlive (RobotAliveRequest) returns (RobotAliveResponse);
   rpc BalanceDistrict (RobotBalanceRequest) returns (Empty);

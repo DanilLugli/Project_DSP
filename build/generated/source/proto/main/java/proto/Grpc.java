@@ -1418,6 +1418,492 @@ public final class Grpc {
 
   }
 
+  public interface RobotResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:proto.RobotResponse)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int32 district = 1;</code>
+     * @return The district.
+     */
+    int getDistrict();
+  }
+  /**
+   * Protobuf type {@code proto.RobotResponse}
+   */
+  public  static final class RobotResponse extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:proto.RobotResponse)
+      RobotResponseOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use RobotResponse.newBuilder() to construct.
+    private RobotResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private RobotResponse() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new RobotResponse();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private RobotResponse(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              district_ = input.readInt32();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return proto.Grpc.internal_static_proto_RobotResponse_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return proto.Grpc.internal_static_proto_RobotResponse_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              proto.Grpc.RobotResponse.class, proto.Grpc.RobotResponse.Builder.class);
+    }
+
+    public static final int DISTRICT_FIELD_NUMBER = 1;
+    private int district_;
+    /**
+     * <code>int32 district = 1;</code>
+     * @return The district.
+     */
+    public int getDistrict() {
+      return district_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (district_ != 0) {
+        output.writeInt32(1, district_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (district_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, district_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof proto.Grpc.RobotResponse)) {
+        return super.equals(obj);
+      }
+      proto.Grpc.RobotResponse other = (proto.Grpc.RobotResponse) obj;
+
+      if (getDistrict()
+          != other.getDistrict()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + DISTRICT_FIELD_NUMBER;
+      hash = (53 * hash) + getDistrict();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static proto.Grpc.RobotResponse parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Grpc.RobotResponse parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Grpc.RobotResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Grpc.RobotResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Grpc.RobotResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Grpc.RobotResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Grpc.RobotResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Grpc.RobotResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Grpc.RobotResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static proto.Grpc.RobotResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Grpc.RobotResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Grpc.RobotResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(proto.Grpc.RobotResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code proto.RobotResponse}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:proto.RobotResponse)
+        proto.Grpc.RobotResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return proto.Grpc.internal_static_proto_RobotResponse_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return proto.Grpc.internal_static_proto_RobotResponse_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                proto.Grpc.RobotResponse.class, proto.Grpc.RobotResponse.Builder.class);
+      }
+
+      // Construct using proto.Grpc.RobotResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        district_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return proto.Grpc.internal_static_proto_RobotResponse_descriptor;
+      }
+
+      @java.lang.Override
+      public proto.Grpc.RobotResponse getDefaultInstanceForType() {
+        return proto.Grpc.RobotResponse.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public proto.Grpc.RobotResponse build() {
+        proto.Grpc.RobotResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public proto.Grpc.RobotResponse buildPartial() {
+        proto.Grpc.RobotResponse result = new proto.Grpc.RobotResponse(this);
+        result.district_ = district_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof proto.Grpc.RobotResponse) {
+          return mergeFrom((proto.Grpc.RobotResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(proto.Grpc.RobotResponse other) {
+        if (other == proto.Grpc.RobotResponse.getDefaultInstance()) return this;
+        if (other.getDistrict() != 0) {
+          setDistrict(other.getDistrict());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        proto.Grpc.RobotResponse parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (proto.Grpc.RobotResponse) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private int district_ ;
+      /**
+       * <code>int32 district = 1;</code>
+       * @return The district.
+       */
+      public int getDistrict() {
+        return district_;
+      }
+      /**
+       * <code>int32 district = 1;</code>
+       * @param value The district to set.
+       * @return This builder for chaining.
+       */
+      public Builder setDistrict(int value) {
+        
+        district_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 district = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearDistrict() {
+        
+        district_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:proto.RobotResponse)
+    }
+
+    // @@protoc_insertion_point(class_scope:proto.RobotResponse)
+    private static final proto.Grpc.RobotResponse DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new proto.Grpc.RobotResponse();
+    }
+
+    public static proto.Grpc.RobotResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<RobotResponse>
+        PARSER = new com.google.protobuf.AbstractParser<RobotResponse>() {
+      @java.lang.Override
+      public RobotResponse parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new RobotResponse(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<RobotResponse> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<RobotResponse> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public proto.Grpc.RobotResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface RemoveRobotResponseOrBuilder extends
       // @@protoc_insertion_point(interface_extends:proto.RemoveRobotResponse)
       com.google.protobuf.MessageOrBuilder {
@@ -1999,6 +2485,12 @@ public final class Grpc {
      */
     com.google.protobuf.ByteString
         getRobotIdBytes();
+
+    /**
+     * <code>int32 district = 2;</code>
+     * @return The district.
+     */
+    int getDistrict();
   }
   /**
    * Protobuf type {@code proto.RemoveRobotRequest}
@@ -2050,6 +2542,11 @@ public final class Grpc {
               java.lang.String s = input.readStringRequireUtf8();
 
               robotId_ = s;
+              break;
+            }
+            case 16: {
+
+              district_ = input.readInt32();
               break;
             }
             default: {
@@ -2120,6 +2617,16 @@ public final class Grpc {
       }
     }
 
+    public static final int DISTRICT_FIELD_NUMBER = 2;
+    private int district_;
+    /**
+     * <code>int32 district = 2;</code>
+     * @return The district.
+     */
+    public int getDistrict() {
+      return district_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -2137,6 +2644,9 @@ public final class Grpc {
       if (!getRobotIdBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, robotId_);
       }
+      if (district_ != 0) {
+        output.writeInt32(2, district_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -2148,6 +2658,10 @@ public final class Grpc {
       size = 0;
       if (!getRobotIdBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, robotId_);
+      }
+      if (district_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, district_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -2166,6 +2680,8 @@ public final class Grpc {
 
       if (!getRobotId()
           .equals(other.getRobotId())) return false;
+      if (getDistrict()
+          != other.getDistrict()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -2179,6 +2695,8 @@ public final class Grpc {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + ROBOTID_FIELD_NUMBER;
       hash = (53 * hash) + getRobotId().hashCode();
+      hash = (37 * hash) + DISTRICT_FIELD_NUMBER;
+      hash = (53 * hash) + getDistrict();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -2314,6 +2832,8 @@ public final class Grpc {
         super.clear();
         robotId_ = "";
 
+        district_ = 0;
+
         return this;
       }
 
@@ -2341,6 +2861,7 @@ public final class Grpc {
       public proto.Grpc.RemoveRobotRequest buildPartial() {
         proto.Grpc.RemoveRobotRequest result = new proto.Grpc.RemoveRobotRequest(this);
         result.robotId_ = robotId_;
+        result.district_ = district_;
         onBuilt();
         return result;
       }
@@ -2392,6 +2913,9 @@ public final class Grpc {
         if (!other.getRobotId().isEmpty()) {
           robotId_ = other.robotId_;
           onChanged();
+        }
+        if (other.getDistrict() != 0) {
+          setDistrict(other.getDistrict());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -2494,6 +3018,36 @@ public final class Grpc {
   checkByteStringIsUtf8(value);
         
         robotId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int district_ ;
+      /**
+       * <code>int32 district = 2;</code>
+       * @return The district.
+       */
+      public int getDistrict() {
+        return district_;
+      }
+      /**
+       * <code>int32 district = 2;</code>
+       * @param value The district to set.
+       * @return This builder for chaining.
+       */
+      public Builder setDistrict(int value) {
+        
+        district_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 district = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearDistrict() {
+        
+        district_ = 0;
         onChanged();
         return this;
       }
@@ -5528,6 +6082,11 @@ public final class Grpc {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_proto_Empty_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_proto_RobotResponse_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_proto_RobotResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_proto_RemoveRobotResponse_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -5574,23 +6133,25 @@ public final class Grpc {
       "\n\nGrpc.proto\022\005proto\"h\n\tRobotInfo\022\017\n\007robo" +
       "tId\030\001 \001(\t\022\017\n\007robotIp\030\002 \001(\t\022\021\n\trobotPort\030" +
       "\003 \001(\005\022\t\n\001x\030\004 \001(\005\022\t\n\001y\030\005 \001(\005\022\020\n\010district\030" +
-      "\006 \001(\005\"\007\n\005Empty\"$\n\023RemoveRobotResponse\022\r\n" +
-      "\005reply\030\001 \001(\t\"%\n\022RemoveRobotRequest\022\017\n\007ro" +
-      "botId\030\001 \001(\t\" \n\021RobotAliveRequest\022\013\n\003ack\030" +
-      "\001 \001(\t\"!\n\022RobotAliveResponse\022\013\n\003msg\030\001 \001(\t" +
-      "\"8\n\023RobotBalanceRequest\022\017\n\007robotId\030\001 \001(\t" +
-      "\022\020\n\010district\030\002 \001(\005\"<\n\026RequestMechanicReq" +
-      "uest\022\017\n\007robotId\030\001 \001(\t\022\021\n\ttimestamp\030\002 \001(\003" +
-      "\"(\n\027RequestMechanicResponse\022\r\n\005reply\030\001 \001" +
-      "(\t2\330\002\n\014RobotService\0220\n\016NotifyNewRobot\022\020." +
-      "proto.RobotInfo\032\014.proto.Empty\022D\n\013removeR" +
-      "obot\022\031.proto.RemoveRobotRequest\032\032.proto." +
-      "RemoveRobotResponse\022A\n\nRobotAlive\022\030.prot" +
-      "o.RobotAliveRequest\032\031.proto.RobotAliveRe" +
-      "sponse\022;\n\017BalanceDistrict\022\032.proto.RobotB" +
-      "alanceRequest\032\014.proto.Empty\022P\n\017RequestMe" +
-      "chanic\022\035.proto.RequestMechanicRequest\032\036." +
-      "proto.RequestMechanicResponseb\006proto3"
+      "\006 \001(\005\"\007\n\005Empty\"!\n\rRobotResponse\022\020\n\010distr" +
+      "ict\030\001 \001(\005\"$\n\023RemoveRobotResponse\022\r\n\005repl" +
+      "y\030\001 \001(\t\"7\n\022RemoveRobotRequest\022\017\n\007robotId" +
+      "\030\001 \001(\t\022\020\n\010district\030\002 \001(\005\" \n\021RobotAliveRe" +
+      "quest\022\013\n\003ack\030\001 \001(\t\"!\n\022RobotAliveResponse" +
+      "\022\013\n\003msg\030\001 \001(\t\"8\n\023RobotBalanceRequest\022\017\n\007" +
+      "robotId\030\001 \001(\t\022\020\n\010district\030\002 \001(\005\"<\n\026Reque" +
+      "stMechanicRequest\022\017\n\007robotId\030\001 \001(\t\022\021\n\tti" +
+      "mestamp\030\002 \001(\003\"(\n\027RequestMechanicResponse" +
+      "\022\r\n\005reply\030\001 \001(\t2\340\002\n\014RobotService\0228\n\016Noti" +
+      "fyNewRobot\022\020.proto.RobotInfo\032\024.proto.Rob" +
+      "otResponse\022D\n\013removeRobot\022\031.proto.Remove" +
+      "RobotRequest\032\032.proto.RemoveRobotResponse" +
+      "\022A\n\nRobotAlive\022\030.proto.RobotAliveRequest" +
+      "\032\031.proto.RobotAliveResponse\022;\n\017BalanceDi" +
+      "strict\022\032.proto.RobotBalanceRequest\032\014.pro" +
+      "to.Empty\022P\n\017RequestMechanic\022\035.proto.Requ" +
+      "estMechanicRequest\032\036.proto.RequestMechan" +
+      "icResponseb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -5608,44 +6169,50 @@ public final class Grpc {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_Empty_descriptor,
         new java.lang.String[] { });
-    internal_static_proto_RemoveRobotResponse_descriptor =
+    internal_static_proto_RobotResponse_descriptor =
       getDescriptor().getMessageTypes().get(2);
+    internal_static_proto_RobotResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_proto_RobotResponse_descriptor,
+        new java.lang.String[] { "District", });
+    internal_static_proto_RemoveRobotResponse_descriptor =
+      getDescriptor().getMessageTypes().get(3);
     internal_static_proto_RemoveRobotResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RemoveRobotResponse_descriptor,
         new java.lang.String[] { "Reply", });
     internal_static_proto_RemoveRobotRequest_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(4);
     internal_static_proto_RemoveRobotRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RemoveRobotRequest_descriptor,
-        new java.lang.String[] { "RobotId", });
+        new java.lang.String[] { "RobotId", "District", });
     internal_static_proto_RobotAliveRequest_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_proto_RobotAliveRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RobotAliveRequest_descriptor,
         new java.lang.String[] { "Ack", });
     internal_static_proto_RobotAliveResponse_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_proto_RobotAliveResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RobotAliveResponse_descriptor,
         new java.lang.String[] { "Msg", });
     internal_static_proto_RobotBalanceRequest_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_proto_RobotBalanceRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RobotBalanceRequest_descriptor,
         new java.lang.String[] { "RobotId", "District", });
     internal_static_proto_RequestMechanicRequest_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_proto_RequestMechanicRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RequestMechanicRequest_descriptor,
         new java.lang.String[] { "RobotId", "Timestamp", });
     internal_static_proto_RequestMechanicResponse_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(9);
     internal_static_proto_RequestMechanicResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RequestMechanicResponse_descriptor,

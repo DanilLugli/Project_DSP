@@ -4,6 +4,8 @@ import beans.Robot;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @XmlRootElement
@@ -11,26 +13,51 @@ public class ModelRobot {
 
     private Robot robot;
     private ArrayList<Robot> robotArrayList;
+    public Map<Integer, Integer> districtMap = new HashMap<Integer, Integer>(){{
+        put(0, 0);
+        put(1, 0);
+        put(2, 0);
+        put(3, 0);
+    }};
 
-    private boolean mechanic = false;
-    public boolean getMechanic() {
-        return mechanic;
+    public void incrementValue(Map<Integer, Integer> map, int key) {
+
+        Integer value = map.get(key);
+
+        if (value != null) {
+            synchronized (this.districtMap){
+                map.put(key, value + 1);
+            }
+        } else {
+            synchronized (this.districtMap){
+                map.put(key, 1);
+            }
+        }
     }
 
-    public void setMechanic(boolean mechanic) {
-        this.mechanic = mechanic;
+    public void decrementValue(Map<Integer, Integer> map, int key) {
+        Integer value = map.get(key);
+
+        if (value != null) {
+            synchronized (map) {
+                map.put(key, value - 1);
+            }
+        } else {
+            synchronized (map) {
+                map.put(key, -1);
+            }
+        }
     }
 
-    private Object chargeBatteryLock = new Object();
+    private Object mechanicLock = new Object();
 
-    public Object getChargeBatteryLock() {
-        return chargeBatteryLock;
+    public Object getMechanicLock() {
+        return mechanicLock;
     }
 
-    public void setChargeBatteryLock(Object chargeBatteryLock) {
-        this.chargeBatteryLock = chargeBatteryLock;
+    public void setMechanicLock(Object mechanicLock) {
+        this.mechanicLock = mechanicLock;
     }
-
 
     private static ModelRobot instance;
 
@@ -74,12 +101,12 @@ public class ModelRobot {
         }
     }
 
-    public synchronized void requestMechanic(){
-        this.mechanic = true;
+    public Map<Integer, Integer> getDistrictMap() {
+        return districtMap;
     }
 
-    public synchronized void releaseMechanic() {
-        this.mechanic = false;
+    public void setDistrictMap(Map<Integer, Integer> districtMap) {
+        this.districtMap = districtMap;
     }
 
 }

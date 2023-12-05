@@ -28,28 +28,28 @@ public final class RobotServiceGrpc {
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<proto.Grpc.RobotInfo,
-      proto.Grpc.Empty> getNotifyNewRobotMethod;
+      proto.Grpc.RobotResponse> getNotifyNewRobotMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "NotifyNewRobot",
       requestType = proto.Grpc.RobotInfo.class,
-      responseType = proto.Grpc.Empty.class,
+      responseType = proto.Grpc.RobotResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<proto.Grpc.RobotInfo,
-      proto.Grpc.Empty> getNotifyNewRobotMethod() {
-    io.grpc.MethodDescriptor<proto.Grpc.RobotInfo, proto.Grpc.Empty> getNotifyNewRobotMethod;
+      proto.Grpc.RobotResponse> getNotifyNewRobotMethod() {
+    io.grpc.MethodDescriptor<proto.Grpc.RobotInfo, proto.Grpc.RobotResponse> getNotifyNewRobotMethod;
     if ((getNotifyNewRobotMethod = RobotServiceGrpc.getNotifyNewRobotMethod) == null) {
       synchronized (RobotServiceGrpc.class) {
         if ((getNotifyNewRobotMethod = RobotServiceGrpc.getNotifyNewRobotMethod) == null) {
           RobotServiceGrpc.getNotifyNewRobotMethod = getNotifyNewRobotMethod =
-              io.grpc.MethodDescriptor.<proto.Grpc.RobotInfo, proto.Grpc.Empty>newBuilder()
+              io.grpc.MethodDescriptor.<proto.Grpc.RobotInfo, proto.Grpc.RobotResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "NotifyNewRobot"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   proto.Grpc.RobotInfo.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  proto.Grpc.Empty.getDefaultInstance()))
+                  proto.Grpc.RobotResponse.getDefaultInstance()))
               .setSchemaDescriptor(new RobotServiceMethodDescriptorSupplier("NotifyNewRobot"))
               .build();
         }
@@ -212,7 +212,7 @@ public final class RobotServiceGrpc {
     /**
      */
     public void notifyNewRobot(proto.Grpc.RobotInfo request,
-        io.grpc.stub.StreamObserver<proto.Grpc.Empty> responseObserver) {
+        io.grpc.stub.StreamObserver<proto.Grpc.RobotResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getNotifyNewRobotMethod(), responseObserver);
     }
 
@@ -251,7 +251,7 @@ public final class RobotServiceGrpc {
             asyncUnaryCall(
               new MethodHandlers<
                 proto.Grpc.RobotInfo,
-                proto.Grpc.Empty>(
+                proto.Grpc.RobotResponse>(
                   this, METHODID_NOTIFY_NEW_ROBOT)))
           .addMethod(
             getRemoveRobotMethod(),
@@ -306,7 +306,7 @@ public final class RobotServiceGrpc {
     /**
      */
     public void notifyNewRobot(proto.Grpc.RobotInfo request,
-        io.grpc.stub.StreamObserver<proto.Grpc.Empty> responseObserver) {
+        io.grpc.stub.StreamObserver<proto.Grpc.RobotResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getNotifyNewRobotMethod(), getCallOptions()), request, responseObserver);
     }
@@ -364,7 +364,7 @@ public final class RobotServiceGrpc {
 
     /**
      */
-    public proto.Grpc.Empty notifyNewRobot(proto.Grpc.RobotInfo request) {
+    public proto.Grpc.RobotResponse notifyNewRobot(proto.Grpc.RobotInfo request) {
       return blockingUnaryCall(
           getChannel(), getNotifyNewRobotMethod(), getCallOptions(), request);
     }
@@ -418,7 +418,7 @@ public final class RobotServiceGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<proto.Grpc.Empty> notifyNewRobot(
+    public com.google.common.util.concurrent.ListenableFuture<proto.Grpc.RobotResponse> notifyNewRobot(
         proto.Grpc.RobotInfo request) {
       return futureUnaryCall(
           getChannel().newCall(getNotifyNewRobotMethod(), getCallOptions()), request);
@@ -482,7 +482,7 @@ public final class RobotServiceGrpc {
       switch (methodId) {
         case METHODID_NOTIFY_NEW_ROBOT:
           serviceImpl.notifyNewRobot((proto.Grpc.RobotInfo) request,
-              (io.grpc.stub.StreamObserver<proto.Grpc.Empty>) responseObserver);
+              (io.grpc.stub.StreamObserver<proto.Grpc.RobotResponse>) responseObserver);
           break;
         case METHODID_REMOVE_ROBOT:
           serviceImpl.removeRobot((proto.Grpc.RemoveRobotRequest) request,
