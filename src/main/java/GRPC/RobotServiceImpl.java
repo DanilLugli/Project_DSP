@@ -72,7 +72,7 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
                 System.out.println(robot.getID());
             }
 
-            System.out.println("SITUA DIS (AFTER): ");
+            System.out.println("SITUA DIS (AFTER REMOVE): ");
             for (int n: ModelRobot.getInstance().getDistrictMap().values()
             ) {
                 System.out.println(n);
@@ -105,7 +105,25 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
     }
 
     @Override
-    public void balanceDistrict(Grpc.RobotBalanceRequest request, StreamObserver<Grpc.Empty> responseObserver) {
+    public void balanceDistrict(Grpc.RobotBalanceRequest request, StreamObserver<Grpc.RobotBalanceResponse> responseObserver) {
+
+        ModelRobot.getInstance().decrementValue(ModelRobot.getInstance().getDistrictMap(), request.getOldDistrict());
+        ModelRobot.getInstance().incrementValue(ModelRobot.getInstance().getDistrictMap(), request.getNewDistrict());
+
+        System.out.println("I've updated district !\n");
+        Grpc.RobotBalanceResponse response = Grpc.RobotBalanceResponse
+                .newBuilder()
+                .setReply("OK")
+                .build();
+
+        /*System.out.println("SITUA DIS (AFTER BALANCE E CRASH): ");
+        for (int n: ModelRobot.getInstance().getDistrictMap().values()
+        ) {
+            System.out.println(n);
+        }*/
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
     }
 
     @Override

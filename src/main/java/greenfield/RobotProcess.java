@@ -117,6 +117,30 @@ public class RobotProcess {
 
     }
 
+    private static void notifyNew() throws IOException {
+        try {
+
+            int port = robot.getPort();
+
+            server = ServerBuilder.forPort(port)
+                    .addService(new RobotServiceImpl())
+                    .build();
+
+            server.start();
+
+            for (Robot r : coordRobot.getRobotsList()) {
+                if (coordRobot.getRobotsList().size() > 1 && !r.getID().equals(robot.getID())) {
+                    if (robot != null) {
+                        NotifyNewRobot n = new NotifyNewRobot(robot, r);
+                        n.start();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     private static void sensorTake() {
         System.out.println("Start taking PM_10 by sensor...");
         BufferImpl pollutionImpl = new BufferImpl();                     //Create pollution Buff
@@ -175,31 +199,6 @@ public class RobotProcess {
         sendThread.start();
     }
 
-    private static void notifyNew() throws IOException {
-        try {
-
-            int port = robot.getPort();
-
-            server = ServerBuilder.forPort(port)
-                    .addService(new RobotServiceImpl())
-                    .build();
-
-            server.start();
-
-            for (Robot r : coordRobot.getRobotsList()) {
-                if (coordRobot.getRobotsList().size() > 1 && !r.getID().equals(robot.getID())) {
-                    if (robot != null) {
-                        System.out.println("Robot inizio "+robot.getDistrict());
-                        NotifyNewRobot n = new NotifyNewRobot(robot, r);
-                        n.start();
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
     private static void manageRobotExit() {
         ArrayList<Robot> robotArrayList = ModelRobot.getInstance().getRobotArrayList();
         new Thread(() -> {
@@ -253,9 +252,6 @@ public class RobotProcess {
 
                     }
                 }
-
-
-
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -308,7 +304,7 @@ public class RobotProcess {
 
                         ArrayList<Robot> robotArrayList = ModelRobot.getInstance().getRobotArrayList();
 
-                        System.out.println("\nFaccio richiesta per il meccanico...");
+                        System.out.println("\nMaking Mechanic Request...");
                         for (Robot r : robotArrayList) {
                             if (!r.getID().equals(robot.getID())) {
                                 try {
@@ -360,13 +356,13 @@ public class RobotProcess {
 
                             myRobot.setRequestMechanic(false);
 
-                            System.out.println("\nSTO RICEVENDO ASSISTENZA...");
+                            System.out.println("\nSTART ASSISTANCE...");
                             myRobot.setRobotRepairing(true);
 
                             Thread.sleep(10000);
 
                             myRobot.setRobotRepairing(false);
-                            System.out.println("HO FINITO DI RICEVERE ASSISTENZA...\n");
+                            System.out.println("END ASSiSTANCE...\n");
 
                         }
 

@@ -48,8 +48,6 @@ public class RobotAlive extends Thread {
             handleTimeout();
             check = true;
 
-            //TODO: CALL HERE BALANCE
-
         } finally {
             channel.shutdown();
         }
@@ -62,19 +60,22 @@ public class RobotAlive extends Thread {
 
             removeRobot(r.getID(), r.getDistrict());
 
-            if(!checkBalance()){
-                while(!checkBalance()){
-                    if (ModelRobot.getInstance().getDistrictMap().get(getMaxDistrict()) > 0) {
-                        synchronized (ModelRobot.getInstance().getDistrictMap()) {
-                            if(SE QUESTO E' IL MIO DISTRETTO MI SPOSTO IO) else (SPOSTO UN ALTRO)
-                            ModelRobot.getInstance().getDistrictMap().put(getMaxDistrict(), ModelRobot.getInstance().getDistrictMap().get(getMaxDistrict()) - 1);
-                            ModelRobot.getInstance().getDistrictMap().put(getMinDistrict(), ModelRobot.getInstance().getDistrictMap().get(getMinDistrict()) + 1);
+            if (checkBalance() == false){
+
+                    synchronized (ModelRobot.getInstance().getDistrictMap()) {
+                        if(ModelRobot.getInstance().getCurrentRobot().getDistrict() == getMaxDistrict()){
+                            System.out.println("My District..");
+
+                            for (Robot r : ModelRobot.getInstance().getRobotArrayList()) {
+
+                                if (!r.getID().equals(ModelRobot.getInstance().getCurrentRobot().getID())) {
+                                    BalanceDistrict balanceDistrict = new BalanceDistrict(ModelRobot.getInstance().getCurrentRobot(), r, getMinDistrict() );
+                                    balanceDistrict.start();
+                                }
+                            }
+                            System.out.println("Me " + ModelRobot.getInstance().getCurrentRobot().getID() + " CHANGE district to balance Greenfield!");
                         }
-                        System.out.println("Robot spostato dal Distretto " + fromDistrict + " al Distretto " + toDistrict);
                     }
-
-                }
-
             }
 
             Client client = Client.create();
@@ -90,11 +91,16 @@ public class RobotAlive extends Thread {
     private void removeRobot(String robotId, int district) {
 
         ModelRobot.getInstance().removeRobotById(robotId);
-        ModelRobot.getInstance().decrementValue(ModelRobot.getInstance().districtMap, district);
+        ModelRobot.getInstance().decrementValue(ModelRobot.getInstance().getDistrictMap(), district);
 
+        /*System.out.println("SITUA DIS (AFTER CRASH): ");
+        for (int n: ModelRobot.getInstance().getDistrictMap().values()
+        ) {
+            System.out.println(n);
+        }*/
     }
 
-    private boolean checkBalance(){
+    private synchronized boolean checkBalance(){
 
         int maxRobots = getMaxRobots();
         int minRobots = getMinRobots();
@@ -117,13 +123,10 @@ public class RobotAlive extends Thread {
                 .orElse(0);
     }
 
-    // Funzione per ottenere il distretto con il minimo numero di robot
     private int getMinDistrict() {
         return ModelRobot.getInstance().getDistrictMap().entrySet().stream()
                 .min(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
                 .orElse(0);
     }
-
-
 }

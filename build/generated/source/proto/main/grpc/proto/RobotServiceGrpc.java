@@ -121,28 +121,28 @@ public final class RobotServiceGrpc {
   }
 
   private static volatile io.grpc.MethodDescriptor<proto.Grpc.RobotBalanceRequest,
-      proto.Grpc.Empty> getBalanceDistrictMethod;
+      proto.Grpc.RobotBalanceResponse> getBalanceDistrictMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "BalanceDistrict",
       requestType = proto.Grpc.RobotBalanceRequest.class,
-      responseType = proto.Grpc.Empty.class,
+      responseType = proto.Grpc.RobotBalanceResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<proto.Grpc.RobotBalanceRequest,
-      proto.Grpc.Empty> getBalanceDistrictMethod() {
-    io.grpc.MethodDescriptor<proto.Grpc.RobotBalanceRequest, proto.Grpc.Empty> getBalanceDistrictMethod;
+      proto.Grpc.RobotBalanceResponse> getBalanceDistrictMethod() {
+    io.grpc.MethodDescriptor<proto.Grpc.RobotBalanceRequest, proto.Grpc.RobotBalanceResponse> getBalanceDistrictMethod;
     if ((getBalanceDistrictMethod = RobotServiceGrpc.getBalanceDistrictMethod) == null) {
       synchronized (RobotServiceGrpc.class) {
         if ((getBalanceDistrictMethod = RobotServiceGrpc.getBalanceDistrictMethod) == null) {
           RobotServiceGrpc.getBalanceDistrictMethod = getBalanceDistrictMethod =
-              io.grpc.MethodDescriptor.<proto.Grpc.RobotBalanceRequest, proto.Grpc.Empty>newBuilder()
+              io.grpc.MethodDescriptor.<proto.Grpc.RobotBalanceRequest, proto.Grpc.RobotBalanceResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "BalanceDistrict"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   proto.Grpc.RobotBalanceRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  proto.Grpc.Empty.getDefaultInstance()))
+                  proto.Grpc.RobotBalanceResponse.getDefaultInstance()))
               .setSchemaDescriptor(new RobotServiceMethodDescriptorSupplier("BalanceDistrict"))
               .build();
         }
@@ -233,7 +233,7 @@ public final class RobotServiceGrpc {
     /**
      */
     public void balanceDistrict(proto.Grpc.RobotBalanceRequest request,
-        io.grpc.stub.StreamObserver<proto.Grpc.Empty> responseObserver) {
+        io.grpc.stub.StreamObserver<proto.Grpc.RobotBalanceResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getBalanceDistrictMethod(), responseObserver);
     }
 
@@ -272,7 +272,7 @@ public final class RobotServiceGrpc {
             asyncUnaryCall(
               new MethodHandlers<
                 proto.Grpc.RobotBalanceRequest,
-                proto.Grpc.Empty>(
+                proto.Grpc.RobotBalanceResponse>(
                   this, METHODID_BALANCE_DISTRICT)))
           .addMethod(
             getRequestMechanicMethod(),
@@ -330,7 +330,7 @@ public final class RobotServiceGrpc {
     /**
      */
     public void balanceDistrict(proto.Grpc.RobotBalanceRequest request,
-        io.grpc.stub.StreamObserver<proto.Grpc.Empty> responseObserver) {
+        io.grpc.stub.StreamObserver<proto.Grpc.RobotBalanceResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getBalanceDistrictMethod(), getCallOptions()), request, responseObserver);
     }
@@ -385,7 +385,7 @@ public final class RobotServiceGrpc {
 
     /**
      */
-    public proto.Grpc.Empty balanceDistrict(proto.Grpc.RobotBalanceRequest request) {
+    public proto.Grpc.RobotBalanceResponse balanceDistrict(proto.Grpc.RobotBalanceRequest request) {
       return blockingUnaryCall(
           getChannel(), getBalanceDistrictMethod(), getCallOptions(), request);
     }
@@ -442,7 +442,7 @@ public final class RobotServiceGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<proto.Grpc.Empty> balanceDistrict(
+    public com.google.common.util.concurrent.ListenableFuture<proto.Grpc.RobotBalanceResponse> balanceDistrict(
         proto.Grpc.RobotBalanceRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getBalanceDistrictMethod(), getCallOptions()), request);
@@ -494,7 +494,7 @@ public final class RobotServiceGrpc {
           break;
         case METHODID_BALANCE_DISTRICT:
           serviceImpl.balanceDistrict((proto.Grpc.RobotBalanceRequest) request,
-              (io.grpc.stub.StreamObserver<proto.Grpc.Empty>) responseObserver);
+              (io.grpc.stub.StreamObserver<proto.Grpc.RobotBalanceResponse>) responseObserver);
           break;
         case METHODID_REQUEST_MECHANIC:
           serviceImpl.requestMechanic((proto.Grpc.RequestMechanicRequest) request,

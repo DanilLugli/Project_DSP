@@ -15,7 +15,6 @@ public class RequestMechanic extends Thread {
     }
 
     public void run() {
-
-
+        //
     }
 }
