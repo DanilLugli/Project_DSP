@@ -42,3 +42,6 @@ build/generated/
 
 # Ignore all .lock files
 *.lock
+
+# Ignore all .hprof files
+*.hprof
