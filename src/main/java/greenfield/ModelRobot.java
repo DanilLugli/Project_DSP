@@ -3,9 +3,7 @@ package greenfield;
 import beans.Robot;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 @XmlRootElement
@@ -19,6 +17,33 @@ public class ModelRobot {
         put(2, 0);
         put(3, 0);
     }};
+
+    public static ModelRobot getInstance() {
+        if (instance == null) {
+            instance = new ModelRobot();
+        }
+        return instance;
+    }
+
+    private boolean robotRepairing;
+
+    private boolean requestMechanic;
+
+    public boolean getRequestMechanic() {
+        return requestMechanic;
+    }
+
+    public void setRequestMechanic(boolean requestMechanic) {
+        this.requestMechanic = requestMechanic;
+    }
+
+    public boolean getRobotRepairing() {
+        return robotRepairing;
+    }
+
+    public void setRobotRepairing(boolean robotRepairing) {
+        this.robotRepairing = robotRepairing;
+    }
 
     public void incrementValue(Map<Integer, Integer> map, int key) {
 
@@ -60,13 +85,6 @@ public class ModelRobot {
     }
 
     private static ModelRobot instance;
-
-    public static ModelRobot getInstance() {
-        if (instance == null) {
-            instance = new ModelRobot();
-        }
-        return instance;
-    }
 
     public ModelRobot() {
         this.robot = null;

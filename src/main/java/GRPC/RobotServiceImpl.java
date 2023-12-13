@@ -8,9 +8,9 @@ import proto.Grpc;
 import proto.RobotServiceGrpc;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
+
 
     @Override
     public void notifyNewRobot(Grpc.RobotInfo request, StreamObserver<Grpc.RobotResponse> responseObserver) {
@@ -44,11 +44,11 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
                 .build();
 
 
-        System.out.println("SITUA DIS: ");
+        /*System.out.println("SITUA DIS: ");
         for (int n: ModelRobot.getInstance().getDistrictMap().values()
         ) {
             System.out.println(n);
-        }
+        }*/
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
@@ -126,44 +126,62 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
         responseObserver.onCompleted();
     }
 
+
     @Override
     public void requestMechanic(Grpc.RequestMechanicRequest request, StreamObserver<Grpc.RequestMechanicResponse> responseObserver) {
+        /*
+        System.out.println("CURRENT: " + ModelRobot.getInstance().getCurrentRobot().getID());
+        System.out.println("REQUEST: " + request.getRobotId());
+        System.out.println("INTERESTED: " + ModelRobot.getInstance().getRequestMechanic());
+         */
+
+
         long requestTimestamp = request.getTimestamp();
-        Date date = new Date();
-        long robotTimestamp = date.getTime();
 
-        Grpc.RequestMechanicResponse response;
 
-            if (!ModelRobot.getInstance().getCurrentRobot().getRobotRepairing()) {
-                response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
-            } else if (ModelRobot.getInstance().getCurrentRobot().getRequestMechanic()){
-                try {
-                    synchronized (ModelRobot.getInstance().getMechanicLock()){
-                        System.out.println("Attendi 222.");
-                        ModelRobot.getInstance().getMechanicLock().wait();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        Grpc.RequestMechanicResponse response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
+
+        if (!ModelRobot.getInstance().getRobotRepairing() && !ModelRobot.getInstance().getRequestMechanic()) {
+
+            response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
+
+        } else if (ModelRobot.getInstance().getRequestMechanic() && requestTimestamp > ModelRobot.getInstance().getCurrentRobot().getLamportTimestamp()){
+
+            try {
+                synchronized (ModelRobot.getInstance().getMechanicLock()){
+                    System.out.println("Attendi "+ request.getRobotId() + ", sei in wait()!");
+                    ModelRobot.getInstance().getMechanicLock().wait();
                 }
-                response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
-
-            } else if (ModelRobot.getInstance().getCurrentRobot().getRobotRepairing()) {
-                try {
-                    synchronized (ModelRobot.getInstance().getMechanicLock()){
-                    System.out.println("Attendi, la sto usando!");
-                    ModelRobot.getInstance().getMechanicLock().wait();}
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
-            } else {
-                response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
-        // Rispondi all'Observer
+            response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
+
+        } else if (ModelRobot.getInstance().getRobotRepairing()) {
+
+            try {
+                synchronized (ModelRobot.getInstance().getMechanicLock()){
+                    //System.out.println("Attendi "+ request.getRobotId() +", la sto usando!");
+                    ModelRobot.getInstance().getMechanicLock().wait();
+
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
+
+        } else {
+
+            response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
+
+        }
+
         responseObserver.onNext(response);
         responseObserver.onCompleted();
-        }
     }
+
+}
 
 

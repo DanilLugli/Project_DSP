@@ -6,14 +6,11 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static java.lang.Math.abs;
-
 //Classe per gestire la lista dei robot
 @XmlRootElement
 @XmlAccessorType
 public class RobotModels {
     private static ArrayList<Robot> listRobot;  //Lista effettiva dei robot
-
 
 
     private final int[] arrayDistrict = new int[4];

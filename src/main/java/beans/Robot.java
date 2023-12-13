@@ -4,10 +4,12 @@ import com.google.gson.annotations.SerializedName;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Random;
 
 @XmlRootElement
 public class Robot {
 
+    private long offset;
 
     @SerializedName("robotId")
     @XmlElement(name = "robotId")
@@ -24,33 +26,32 @@ public class Robot {
 
 
     //Sono dal meccanico
-    private boolean robotRepairing;
 
-    //Sono interessato al meccanico
-    private boolean requestMechanic;
-
-    public boolean getRequestMechanic() {
-        return requestMechanic;
-    }
-
-    public void setRequestMechanic(boolean requestMechanic) {
-        this.requestMechanic = requestMechanic;
-    }
-
-    public boolean getRobotRepairing() {
-        return robotRepairing;
-    }
-
-    public void setRobotRepairing(boolean robotRepairing) {
-        this.robotRepairing = robotRepairing;
-    }
 
     public Robot(){}
 
-    public Robot(String id, String ip, int port) {
+    public Robot(String id, String ip, int port, long lamportTimestamp) {
         this.id = id;
         this.ip = ip;
         this.port = port;
+        this.lamportTimestamp = lamportTimestamp;
+        this.offset = new Random().nextInt(1000);
+    }
+
+    private long lamportTimestamp = 0;
+
+    public synchronized long getLamportTimestamp() {
+        return lamportTimestamp;
+    }
+
+    public synchronized void incrementLamportTimestamp() {
+        this.lamportTimestamp++;
+        this.lamportTimestamp += offset;
+    }
+
+    public synchronized void updateLamportTimestamp(long receivedTimestamp) {
+        lamportTimestamp = Math.max(lamportTimestamp, receivedTimestamp) + 1;
+        lamportTimestamp += offset;
     }
 
 

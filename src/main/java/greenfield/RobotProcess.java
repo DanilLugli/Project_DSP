@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
 
 public class RobotProcess {
     static Robot robot;
@@ -60,8 +61,10 @@ public class RobotProcess {
                     "  \"ip\": \"" + robotIp + "\",\n" +
                     "  \"port\": \"" + robotPort + "\"}";
 
+            Date date = new Date();
+            long lamportTimestamp = date.getTime();
             //CREATE NEW OBJECT ROBOT
-            robot = new Robot(robotId, robotIp, robotPort);
+            robot = new Robot(robotId, robotIp, robotPort, lamportTimestamp);
 
             ClientResponse result = webResource.type("application/json").put(ClientResponse.class, robot);
 
@@ -78,6 +81,9 @@ public class RobotProcess {
                 modelRobot.setRobot(robot);
                 modelRobot.setRobotArrayList(coordRobot.getRobotsList());
                 modelRobot.incrementValue(modelRobot.getDistrictMap(), robot.getDistrict());
+
+                System.out.println("\n\nFOR --> " + modelRobot.getCurrentRobot().getID() + " the instance of Model Robot is : " + modelRobot + "\n\n");
+
 
                 if (modelRobot.getRobotArrayList().isEmpty()) {
                     System.out.println("List of Robot is empty.");
@@ -290,91 +296,84 @@ public class RobotProcess {
 
     private static void requestMechanic(){
 
+
         Thread mechanicThread = new Thread(() -> {
             try {
                 while (true) {
-                    if (Math.random() <= 0.5) {  //Calculate the chance
-                        Date date = new Date();
-                        long timestamp = date.getTime();
 
-                        Robot myRobot = ModelRobot.getInstance().getCurrentRobot();
-                        myRobot.setRequestMechanic(true);
+                    //CREO UNA COPIA SE NO PROBLEMA QUANDO ENTRA UN NUOVO ROBOT MENTRE ITERO
+                    ArrayList<Robot> iterList = new ArrayList<>(ModelRobot.getInstance().getRobotArrayList());
 
-                        int countMechanic = 0;
+                    if (Math.random() <= 0.5) {
 
-                        ArrayList<Robot> robotArrayList = ModelRobot.getInstance().getRobotArrayList();
+                        CountDownLatch latch;
 
+
+                        ModelRobot.getInstance().setRequestMechanic(true);
+
+                        //ArrayList<Robot> robotArrayList = ModelRobot.getInstance().getRobotArrayList();
+                        latch = new CountDownLatch(iterList.size() -1);
+
+                        ModelRobot.getInstance().getCurrentRobot().incrementLamportTimestamp();
                         System.out.println("\nMaking Mechanic Request...");
-                        for (Robot r : robotArrayList) {
-                            if (!r.getID().equals(robot.getID())) {
+                        //System.out.println("TIMESTAMP: " + ModelRobot.getInstance().getCurrentRobot().getLamportTimestamp());
+
+                        for (Robot r : iterList) {
+                            if (!r.getID().equals(ModelRobot.getInstance().getCurrentRobot().getID())) {
                                 try {
 
-                                    String myRobotId = myRobot.getID();
-                                    if (myRobotId != null) {
-                                        try {
-                                            final ManagedChannel channel = ManagedChannelBuilder.forTarget(r.getIP() + ":" + r.getPort())
-                                                    .usePlaintext()
-                                                    .build();
+                                    final ManagedChannel channel = ManagedChannelBuilder.forTarget(r.getIP() + ":" + r.getPort())
+                                            .usePlaintext()
+                                            .build();
 
-                                            RobotServiceGrpc.RobotServiceBlockingStub stub = RobotServiceGrpc.newBlockingStub(channel);
-                                            Grpc.RequestMechanicRequest request = Grpc.RequestMechanicRequest.newBuilder()
-                                                    .setRobotId(myRobotId)
-                                                    .setTimestamp(timestamp)
-                                                    .build();
+                                    RobotServiceGrpc.RobotServiceBlockingStub stub = RobotServiceGrpc.newBlockingStub(channel);
+                                    Grpc.RequestMechanicRequest request = Grpc.RequestMechanicRequest.newBuilder()
+                                            .setRobotId(ModelRobot.getInstance().getCurrentRobot().getID())
+                                            .setTimestamp(ModelRobot.getInstance().getCurrentRobot().getLamportTimestamp())
+                                            .build();
 
-                                            Grpc.RequestMechanicResponse response;
+                                    Grpc.RequestMechanicResponse response;
 
-                                            try {
+                                    try {
 
-                                                response = stub.requestMechanic(request);
+                                        response = stub.requestMechanic(request);
+                                        if(response.getReply().equals("OK"))
+                                            latch.countDown();
+                                        System.out.println("Response: " + r.getID() + ": " + response.getReply());
 
-                                                if(response.getReply().equals("OK")){
-                                                    countMechanic++;
-                                                }
-                                                System.out.println("Response: " + r.getID() + ": " + response.getReply());
-
-                                            } catch (StatusRuntimeException e) {
-                                                System.out.println("Error communicating with " + r.getID() + ": " + e.getStatus());
-                                            } catch (Exception e) {
-                                                System.out.println("Unexpected error: " + e);
-                                            }
-
-                                            channel.shutdownNow();
-                                        } catch (Exception e) {
-                                            System.out.println(e);
-                                        }
-                                    } else {
-                                        System.out.println("ERROR: myRobot is null.");
+                                    } catch (StatusRuntimeException e) {
+                                        e.printStackTrace();
                                     }
+
+                                    channel.shutdownNow();
+
                                 } catch (Exception e) {
-                                    System.out.println(e);
+                                    System.out.println("3");
+                                    e.printStackTrace();
                                 }
                             }
                         }
 
-                        if(countMechanic == (ModelRobot.getInstance().getRobotArrayList().size()-1)){
+                        latch.await();
 
-                            myRobot.setRequestMechanic(false);
+                        ModelRobot.getInstance().setRequestMechanic(false);
 
-                            System.out.println("\nSTART ASSISTANCE...");
-                            myRobot.setRobotRepairing(true);
+                        System.out.println("\nSTO RICEVENDO ASSISTENZA...");
+                        ModelRobot.getInstance().setRobotRepairing(true);
 
-                            Thread.sleep(10000);
+                        Thread.sleep(10000);
 
-                            myRobot.setRobotRepairing(false);
-                            System.out.println("END ASSiSTANCE...\n");
+                        ModelRobot.getInstance().setRobotRepairing(false);
+                        System.out.println("HO FINITO DI RICEVERE ASSISTENZA...\n");
 
-                        }
-
-                        synchronized (ModelRobot.getInstance().getMechanicLock()) {
+                        synchronized (ModelRobot.getInstance().getMechanicLock()){
                             ModelRobot.getInstance().getMechanicLock().notifyAll();
                         }
-
                     }
                     Thread.sleep(10000); //Every 10 seconds could be the chance
-
                 }
             } catch (Exception e) {
+                System.out.println("1");
                 System.out.println(e);
             }
         });

@@ -47,6 +47,7 @@ public class BalanceDistrict extends Thread {
         try {
 
             Grpc.RobotBalanceResponse response = stub.balanceDistrict(request);
+            System.out.println(response);
             //System.out.println(response.getReply());
 
         } catch (Exception e) {

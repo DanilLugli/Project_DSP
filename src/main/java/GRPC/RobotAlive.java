@@ -12,8 +12,6 @@ import proto.Grpc;
 import proto.RobotServiceGrpc;
 
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 
 public class RobotAlive extends Thread {
@@ -21,8 +19,7 @@ public class RobotAlive extends Thread {
     public boolean check = false;
     private final Robot r;
     private final int timeoutMs;
-    private static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
-    private volatile boolean responseReceived = false;
+    private final boolean responseReceived = false;
 
     public RobotAlive(Robot r, int timeoutMs) {
         this.r = r;
@@ -60,7 +57,7 @@ public class RobotAlive extends Thread {
 
             removeRobot(r.getID(), r.getDistrict());
 
-            if (checkBalance() == false){
+            if (!checkBalance()){
 
                     synchronized (ModelRobot.getInstance().getDistrictMap()) {
                         if(ModelRobot.getInstance().getCurrentRobot().getDistrict() == getMaxDistrict()){
@@ -71,6 +68,7 @@ public class RobotAlive extends Thread {
                                 if (!r.getID().equals(ModelRobot.getInstance().getCurrentRobot().getID())) {
                                     BalanceDistrict balanceDistrict = new BalanceDistrict(ModelRobot.getInstance().getCurrentRobot(), r, getMinDistrict() );
                                     balanceDistrict.start();
+
                                 }
                             }
                             System.out.println("Me " + ModelRobot.getInstance().getCurrentRobot().getID() + " CHANGE district to balance Greenfield!");
