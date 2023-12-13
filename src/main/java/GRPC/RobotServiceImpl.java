@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
 
-
     @Override
     public void notifyNewRobot(Grpc.RobotInfo request, StreamObserver<Grpc.RobotResponse> responseObserver) {
 
@@ -126,20 +125,12 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
         responseObserver.onCompleted();
     }
 
-
     @Override
     public void requestMechanic(Grpc.RequestMechanicRequest request, StreamObserver<Grpc.RequestMechanicResponse> responseObserver) {
-        /*
-        System.out.println("CURRENT: " + ModelRobot.getInstance().getCurrentRobot().getID());
-        System.out.println("REQUEST: " + request.getRobotId());
-        System.out.println("INTERESTED: " + ModelRobot.getInstance().getRequestMechanic());
-         */
-
 
         long requestTimestamp = request.getTimestamp();
 
-
-        Grpc.RequestMechanicResponse response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
+        Grpc.RequestMechanicResponse response;
 
         if (!ModelRobot.getInstance().getRobotRepairing() && !ModelRobot.getInstance().getRequestMechanic()) {
 

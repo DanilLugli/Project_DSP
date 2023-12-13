@@ -29,10 +29,7 @@ public class RobotProcess {
     static int robotPort;
     static String robotIp;
     static ArrayList<Measurement> measurementList = new ArrayList<>();
-
-
     static Server server;
-
     static CoordRobot coordRobot;
 
 
@@ -296,27 +293,21 @@ public class RobotProcess {
 
     private static void requestMechanic(){
 
-
         Thread mechanicThread = new Thread(() -> {
             try {
                 while (true) {
 
-                    //CREO UNA COPIA SE NO PROBLEMA QUANDO ENTRA UN NUOVO ROBOT MENTRE ITERO
+                    //Create a copy of list, problem when add a new robot while work on list
                     ArrayList<Robot> iterList = new ArrayList<>(ModelRobot.getInstance().getRobotArrayList());
 
-                    if (Math.random() <= 0.5) {
+                    if (Math.random() <= 0.1) { //10% of chance
 
                         CountDownLatch latch;
-
-
                         ModelRobot.getInstance().setRequestMechanic(true);
-
-                        //ArrayList<Robot> robotArrayList = ModelRobot.getInstance().getRobotArrayList();
                         latch = new CountDownLatch(iterList.size() -1);
 
                         ModelRobot.getInstance().getCurrentRobot().incrementLamportTimestamp();
                         System.out.println("\nMaking Mechanic Request...");
-                        //System.out.println("TIMESTAMP: " + ModelRobot.getInstance().getCurrentRobot().getLamportTimestamp());
 
                         for (Robot r : iterList) {
                             if (!r.getID().equals(ModelRobot.getInstance().getCurrentRobot().getID())) {
@@ -358,13 +349,13 @@ public class RobotProcess {
 
                         ModelRobot.getInstance().setRequestMechanic(false);
 
-                        System.out.println("\nSTO RICEVENDO ASSISTENZA...");
+                        System.out.println("\n--> RECEIVING ASSISTANCE FROM MECHANIC...");
                         ModelRobot.getInstance().setRobotRepairing(true);
 
                         Thread.sleep(10000);
 
                         ModelRobot.getInstance().setRobotRepairing(false);
-                        System.out.println("HO FINITO DI RICEVERE ASSISTENZA...\n");
+                        System.out.println("...ASSISTANCE FINISHED! <--\n");
 
                         synchronized (ModelRobot.getInstance().getMechanicLock()){
                             ModelRobot.getInstance().getMechanicLock().notifyAll();

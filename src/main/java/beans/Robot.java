@@ -24,10 +24,6 @@ public class Robot {
 
     private int district;
 
-
-    //Sono dal meccanico
-
-
     public Robot(){}
 
     public Robot(String id, String ip, int port, long lamportTimestamp) {
