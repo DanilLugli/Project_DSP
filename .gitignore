@@ -39,3 +39,6 @@ build/generated/
 
 # Ignore folders starting with "phao"
 /paho*/
+
+# Ignore all .lock files
+*.lock

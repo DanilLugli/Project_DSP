@@ -162,7 +162,7 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
 
             try {
                 synchronized (ModelRobot.getInstance().getMechanicLock()){
-                    //System.out.println("Attendi "+ request.getRobotId() +", la sto usando!");
+                    System.out.println("Attendi "+ request.getRobotId() +", Io " + ModelRobot.getInstance().getCurrentRobot().getID() + " la sto usando!");
                     ModelRobot.getInstance().getMechanicLock().wait();
 
                 }
