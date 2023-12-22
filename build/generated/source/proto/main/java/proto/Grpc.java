@@ -6705,6 +6705,1138 @@ public final class Grpc {
 
   }
 
+  public interface RequestCheckDeleteOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:proto.RequestCheckDelete)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string robotId = 1;</code>
+     * @return The robotId.
+     */
+    java.lang.String getRobotId();
+    /**
+     * <code>string robotId = 1;</code>
+     * @return The bytes for robotId.
+     */
+    com.google.protobuf.ByteString
+        getRobotIdBytes();
+  }
+  /**
+   * Protobuf type {@code proto.RequestCheckDelete}
+   */
+  public  static final class RequestCheckDelete extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:proto.RequestCheckDelete)
+      RequestCheckDeleteOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use RequestCheckDelete.newBuilder() to construct.
+    private RequestCheckDelete(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private RequestCheckDelete() {
+      robotId_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new RequestCheckDelete();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private RequestCheckDelete(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              robotId_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return proto.Grpc.internal_static_proto_RequestCheckDelete_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return proto.Grpc.internal_static_proto_RequestCheckDelete_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              proto.Grpc.RequestCheckDelete.class, proto.Grpc.RequestCheckDelete.Builder.class);
+    }
+
+    public static final int ROBOTID_FIELD_NUMBER = 1;
+    private volatile java.lang.Object robotId_;
+    /**
+     * <code>string robotId = 1;</code>
+     * @return The robotId.
+     */
+    public java.lang.String getRobotId() {
+      java.lang.Object ref = robotId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        robotId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string robotId = 1;</code>
+     * @return The bytes for robotId.
+     */
+    public com.google.protobuf.ByteString
+        getRobotIdBytes() {
+      java.lang.Object ref = robotId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        robotId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getRobotIdBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, robotId_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getRobotIdBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, robotId_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof proto.Grpc.RequestCheckDelete)) {
+        return super.equals(obj);
+      }
+      proto.Grpc.RequestCheckDelete other = (proto.Grpc.RequestCheckDelete) obj;
+
+      if (!getRobotId()
+          .equals(other.getRobotId())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + ROBOTID_FIELD_NUMBER;
+      hash = (53 * hash) + getRobotId().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static proto.Grpc.RequestCheckDelete parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Grpc.RequestCheckDelete parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Grpc.RequestCheckDelete parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Grpc.RequestCheckDelete parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Grpc.RequestCheckDelete parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Grpc.RequestCheckDelete parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Grpc.RequestCheckDelete parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Grpc.RequestCheckDelete parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Grpc.RequestCheckDelete parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static proto.Grpc.RequestCheckDelete parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Grpc.RequestCheckDelete parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Grpc.RequestCheckDelete parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(proto.Grpc.RequestCheckDelete prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code proto.RequestCheckDelete}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:proto.RequestCheckDelete)
+        proto.Grpc.RequestCheckDeleteOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return proto.Grpc.internal_static_proto_RequestCheckDelete_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return proto.Grpc.internal_static_proto_RequestCheckDelete_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                proto.Grpc.RequestCheckDelete.class, proto.Grpc.RequestCheckDelete.Builder.class);
+      }
+
+      // Construct using proto.Grpc.RequestCheckDelete.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        robotId_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return proto.Grpc.internal_static_proto_RequestCheckDelete_descriptor;
+      }
+
+      @java.lang.Override
+      public proto.Grpc.RequestCheckDelete getDefaultInstanceForType() {
+        return proto.Grpc.RequestCheckDelete.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public proto.Grpc.RequestCheckDelete build() {
+        proto.Grpc.RequestCheckDelete result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public proto.Grpc.RequestCheckDelete buildPartial() {
+        proto.Grpc.RequestCheckDelete result = new proto.Grpc.RequestCheckDelete(this);
+        result.robotId_ = robotId_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof proto.Grpc.RequestCheckDelete) {
+          return mergeFrom((proto.Grpc.RequestCheckDelete)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(proto.Grpc.RequestCheckDelete other) {
+        if (other == proto.Grpc.RequestCheckDelete.getDefaultInstance()) return this;
+        if (!other.getRobotId().isEmpty()) {
+          robotId_ = other.robotId_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        proto.Grpc.RequestCheckDelete parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (proto.Grpc.RequestCheckDelete) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object robotId_ = "";
+      /**
+       * <code>string robotId = 1;</code>
+       * @return The robotId.
+       */
+      public java.lang.String getRobotId() {
+        java.lang.Object ref = robotId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          robotId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string robotId = 1;</code>
+       * @return The bytes for robotId.
+       */
+      public com.google.protobuf.ByteString
+          getRobotIdBytes() {
+        java.lang.Object ref = robotId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          robotId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string robotId = 1;</code>
+       * @param value The robotId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRobotId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        robotId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string robotId = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRobotId() {
+        
+        robotId_ = getDefaultInstance().getRobotId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string robotId = 1;</code>
+       * @param value The bytes for robotId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRobotIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        robotId_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:proto.RequestCheckDelete)
+    }
+
+    // @@protoc_insertion_point(class_scope:proto.RequestCheckDelete)
+    private static final proto.Grpc.RequestCheckDelete DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new proto.Grpc.RequestCheckDelete();
+    }
+
+    public static proto.Grpc.RequestCheckDelete getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<RequestCheckDelete>
+        PARSER = new com.google.protobuf.AbstractParser<RequestCheckDelete>() {
+      @java.lang.Override
+      public RequestCheckDelete parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new RequestCheckDelete(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<RequestCheckDelete> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<RequestCheckDelete> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public proto.Grpc.RequestCheckDelete getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface ResponseCheckDeleteOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:proto.ResponseCheckDelete)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string ack = 1;</code>
+     * @return The ack.
+     */
+    java.lang.String getAck();
+    /**
+     * <code>string ack = 1;</code>
+     * @return The bytes for ack.
+     */
+    com.google.protobuf.ByteString
+        getAckBytes();
+  }
+  /**
+   * Protobuf type {@code proto.ResponseCheckDelete}
+   */
+  public  static final class ResponseCheckDelete extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:proto.ResponseCheckDelete)
+      ResponseCheckDeleteOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use ResponseCheckDelete.newBuilder() to construct.
+    private ResponseCheckDelete(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private ResponseCheckDelete() {
+      ack_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new ResponseCheckDelete();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ResponseCheckDelete(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              ack_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return proto.Grpc.internal_static_proto_ResponseCheckDelete_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return proto.Grpc.internal_static_proto_ResponseCheckDelete_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              proto.Grpc.ResponseCheckDelete.class, proto.Grpc.ResponseCheckDelete.Builder.class);
+    }
+
+    public static final int ACK_FIELD_NUMBER = 1;
+    private volatile java.lang.Object ack_;
+    /**
+     * <code>string ack = 1;</code>
+     * @return The ack.
+     */
+    public java.lang.String getAck() {
+      java.lang.Object ref = ack_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        ack_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string ack = 1;</code>
+     * @return The bytes for ack.
+     */
+    public com.google.protobuf.ByteString
+        getAckBytes() {
+      java.lang.Object ref = ack_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        ack_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getAckBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, ack_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getAckBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, ack_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof proto.Grpc.ResponseCheckDelete)) {
+        return super.equals(obj);
+      }
+      proto.Grpc.ResponseCheckDelete other = (proto.Grpc.ResponseCheckDelete) obj;
+
+      if (!getAck()
+          .equals(other.getAck())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + ACK_FIELD_NUMBER;
+      hash = (53 * hash) + getAck().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static proto.Grpc.ResponseCheckDelete parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Grpc.ResponseCheckDelete parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Grpc.ResponseCheckDelete parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Grpc.ResponseCheckDelete parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Grpc.ResponseCheckDelete parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static proto.Grpc.ResponseCheckDelete parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static proto.Grpc.ResponseCheckDelete parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Grpc.ResponseCheckDelete parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Grpc.ResponseCheckDelete parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static proto.Grpc.ResponseCheckDelete parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static proto.Grpc.ResponseCheckDelete parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static proto.Grpc.ResponseCheckDelete parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(proto.Grpc.ResponseCheckDelete prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code proto.ResponseCheckDelete}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:proto.ResponseCheckDelete)
+        proto.Grpc.ResponseCheckDeleteOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return proto.Grpc.internal_static_proto_ResponseCheckDelete_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return proto.Grpc.internal_static_proto_ResponseCheckDelete_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                proto.Grpc.ResponseCheckDelete.class, proto.Grpc.ResponseCheckDelete.Builder.class);
+      }
+
+      // Construct using proto.Grpc.ResponseCheckDelete.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        ack_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return proto.Grpc.internal_static_proto_ResponseCheckDelete_descriptor;
+      }
+
+      @java.lang.Override
+      public proto.Grpc.ResponseCheckDelete getDefaultInstanceForType() {
+        return proto.Grpc.ResponseCheckDelete.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public proto.Grpc.ResponseCheckDelete build() {
+        proto.Grpc.ResponseCheckDelete result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public proto.Grpc.ResponseCheckDelete buildPartial() {
+        proto.Grpc.ResponseCheckDelete result = new proto.Grpc.ResponseCheckDelete(this);
+        result.ack_ = ack_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof proto.Grpc.ResponseCheckDelete) {
+          return mergeFrom((proto.Grpc.ResponseCheckDelete)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(proto.Grpc.ResponseCheckDelete other) {
+        if (other == proto.Grpc.ResponseCheckDelete.getDefaultInstance()) return this;
+        if (!other.getAck().isEmpty()) {
+          ack_ = other.ack_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        proto.Grpc.ResponseCheckDelete parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (proto.Grpc.ResponseCheckDelete) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object ack_ = "";
+      /**
+       * <code>string ack = 1;</code>
+       * @return The ack.
+       */
+      public java.lang.String getAck() {
+        java.lang.Object ref = ack_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          ack_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string ack = 1;</code>
+       * @return The bytes for ack.
+       */
+      public com.google.protobuf.ByteString
+          getAckBytes() {
+        java.lang.Object ref = ack_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          ack_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string ack = 1;</code>
+       * @param value The ack to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAck(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ack_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string ack = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAck() {
+        
+        ack_ = getDefaultInstance().getAck();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string ack = 1;</code>
+       * @param value The bytes for ack to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAckBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        ack_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:proto.ResponseCheckDelete)
+    }
+
+    // @@protoc_insertion_point(class_scope:proto.ResponseCheckDelete)
+    private static final proto.Grpc.ResponseCheckDelete DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new proto.Grpc.ResponseCheckDelete();
+    }
+
+    public static proto.Grpc.ResponseCheckDelete getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<ResponseCheckDelete>
+        PARSER = new com.google.protobuf.AbstractParser<ResponseCheckDelete>() {
+      @java.lang.Override
+      public ResponseCheckDelete parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ResponseCheckDelete(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<ResponseCheckDelete> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ResponseCheckDelete> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public proto.Grpc.ResponseCheckDelete getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_proto_RobotInfo_descriptor;
   private static final 
@@ -6760,6 +7892,16 @@ public final class Grpc {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_proto_RequestMechanicResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_proto_RequestCheckDelete_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_proto_RequestCheckDelete_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_proto_ResponseCheckDelete_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_proto_ResponseCheckDelete_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -6782,17 +7924,20 @@ public final class Grpc {
       "District\030\003 \001(\005\"%\n\024RobotBalanceResponse\022\r" +
       "\n\005reply\030\001 \001(\t\"<\n\026RequestMechanicRequest\022" +
       "\017\n\007robotId\030\001 \001(\t\022\021\n\ttimestamp\030\002 \001(\003\"(\n\027R" +
-      "equestMechanicResponse\022\r\n\005reply\030\001 \001(\t2\357\002" +
-      "\n\014RobotService\0228\n\016NotifyNewRobot\022\020.proto" +
-      ".RobotInfo\032\024.proto.RobotResponse\022D\n\013remo" +
-      "veRobot\022\031.proto.RemoveRobotRequest\032\032.pro" +
-      "to.RemoveRobotResponse\022A\n\nRobotAlive\022\030.p" +
-      "roto.RobotAliveRequest\032\031.proto.RobotAliv" +
-      "eResponse\022J\n\017BalanceDistrict\022\032.proto.Rob" +
-      "otBalanceRequest\032\033.proto.RobotBalanceRes" +
-      "ponse\022P\n\017RequestMechanic\022\035.proto.Request" +
-      "MechanicRequest\032\036.proto.RequestMechanicR" +
-      "esponseb\006proto3"
+      "equestMechanicResponse\022\r\n\005reply\030\001 \001(\t\"%\n" +
+      "\022RequestCheckDelete\022\017\n\007robotId\030\001 \001(\t\"\"\n\023" +
+      "ResponseCheckDelete\022\013\n\003ack\030\001 \001(\t2\265\003\n\014Rob" +
+      "otService\0228\n\016NotifyNewRobot\022\020.proto.Robo" +
+      "tInfo\032\024.proto.RobotResponse\022D\n\013removeRob" +
+      "ot\022\031.proto.RemoveRobotRequest\032\032.proto.Re" +
+      "moveRobotResponse\022A\n\nRobotAlive\022\030.proto." +
+      "RobotAliveRequest\032\031.proto.RobotAliveResp" +
+      "onse\022J\n\017BalanceDistrict\022\032.proto.RobotBal" +
+      "anceRequest\032\033.proto.RobotBalanceResponse" +
+      "\022P\n\017RequestMechanic\022\035.proto.RequestMecha" +
+      "nicRequest\032\036.proto.RequestMechanicRespon" +
+      "se\022D\n\013CheckDelete\022\031.proto.RequestCheckDe" +
+      "lete\032\032.proto.ResponseCheckDeleteb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -6864,6 +8009,18 @@ public final class Grpc {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_RequestMechanicResponse_descriptor,
         new java.lang.String[] { "Reply", });
+    internal_static_proto_RequestCheckDelete_descriptor =
+      getDescriptor().getMessageTypes().get(11);
+    internal_static_proto_RequestCheckDelete_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_proto_RequestCheckDelete_descriptor,
+        new java.lang.String[] { "RobotId", });
+    internal_static_proto_ResponseCheckDelete_descriptor =
+      getDescriptor().getMessageTypes().get(12);
+    internal_static_proto_ResponseCheckDelete_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_proto_ResponseCheckDelete_descriptor,
+        new java.lang.String[] { "Ack", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

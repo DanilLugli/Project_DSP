@@ -1,7 +1,6 @@
 package GRPC;
 
 import beans.Robot;
-import greenfield.ModelRobot;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import proto.Grpc;
@@ -14,13 +13,15 @@ public class BalanceDistrict extends Thread {
     Robot r = new Robot();
 
     int newDistrict;
+    int oldDistrict;
 
     public BalanceDistrict(){};
 
-    public BalanceDistrict(Robot s, Robot r, int newDistrict){
+    public BalanceDistrict(Robot s, Robot r, int newDistrict, int oldDistrict){
         this.s = s;
         this.r = r;
         this.newDistrict = newDistrict;
+        this.oldDistrict = oldDistrict;
     }
 
     public void run(){
@@ -31,24 +32,30 @@ public class BalanceDistrict extends Thread {
         RobotServiceGrpc.RobotServiceBlockingStub stub = RobotServiceGrpc.newBlockingStub(channel);
 
 
-        int oldDistrict = s.getDistrict();
+        //int oldDistrict = s.getDistrict();
         Grpc.RobotBalanceRequest request = Grpc.RobotBalanceRequest.newBuilder()
                 .setOldDistrict(oldDistrict)
                 .setNewDistrict(newDistrict)
                 .setStatus(s.getID())
                 .build();
 
+        /*
         //System.out.println(ModelRobot.getInstance().getCurrentRobot().getDistrict());
         ModelRobot.getInstance().getCurrentRobot().setDistrict(newDistrict);
         //System.out.println(ModelRobot.getInstance().getCurrentRobot().getDistrict());
+
         ModelRobot.getInstance().decrementValue(ModelRobot.getInstance().getDistrictMap(), oldDistrict);
         ModelRobot.getInstance().incrementValue(ModelRobot.getInstance().getDistrictMap(), newDistrict);
+        */
+
 
         try {
 
             Grpc.RobotBalanceResponse response = stub.balanceDistrict(request);
-            System.out.println(response);
+            System.out.println("Response Balance: "+response);
+            //System.out.println("I've updated my district!");
             //System.out.println(response.getReply());
+            //ModelRobot.getInstance().getBalanceLock().notifyAll();
 
         } catch (Exception e) {
             e.printStackTrace();

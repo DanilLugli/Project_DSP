@@ -31,6 +31,7 @@ public class RobotProcess {
     static ArrayList<Measurement> measurementList = new ArrayList<>();
     static Server server;
     static CoordRobot coordRobot;
+    static MQTTClient mqttPublisher = new MQTTClient("tcp://localhost:1883");
 
 
     public static void main(String[] args) throws IOException {
@@ -109,7 +110,7 @@ public class RobotProcess {
             sensorSend();
 
             //GRPC Alive - THREAD
-            sendGrpcRequestToAllRobots();
+            checkRobotAlive();
 
             //Request Mechanic - THREAD
             requestMechanic();
@@ -178,7 +179,7 @@ public class RobotProcess {
     }
 
     private static void sensorSend() {
-        MQTTClient mqttPublisher = new MQTTClient("tcp://localhost:1883");
+
 
         String topic = "greenfield/pollution/district/" + coordRobot.getDistrict();
 
@@ -210,8 +211,26 @@ public class RobotProcess {
                     Scanner scanner = new Scanner(System.in);
                     String input = scanner.next();
 
-                    //Write into command line that i want to leave
                     if (input.equals("exit")) {
+
+                        synchronized (ModelRobot.getInstance().getMechanicLock()){
+                            while (ModelRobot.getInstance().getRobotRepairing() || ModelRobot.getInstance().getRequestMechanic()){
+                                try{
+                                    System.out.println("I'm waiting mechanic, wait!");
+                                    ModelRobot.getInstance().getMechanicLock().wait();
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
+                            }
+
+                        }
+
+                        try{
+                            mqttPublisher.close();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
 
                         for (Robot r : robotArrayList) {
                             if (robotArrayList.size() >= 1 && !r.getID().equals(robotId)) {
@@ -224,7 +243,7 @@ public class RobotProcess {
                         try {
                             if (server != null) {
                                 server.shutdownNow();
-                                System.out.println("GRPC Server stopped!");
+                                System.out.println("GRPC Server stopped.");
                             } else {
                                 System.out.println("Server is already null.");
                             }
@@ -240,17 +259,26 @@ public class RobotProcess {
                         else System.out.println("null RobotID");
                         try {
                             Client client = Client.create();
+
                             WebResource webResource = client.resource("http://localhost:1993/Robot/delete/" + robotId);
 
                             ClientResponse result = webResource.type("application/json").delete(ClientResponse.class);
 
                             if (result.getStatus() == 200) {
-                                System.out.println("Delete from network OK");
+                                System.out.println("Delete from network: OK");
                                 System.exit(0);
                             }
 
                         } catch (Exception e) {
                             e.printStackTrace();
+                        }
+
+                    } else if (input.equals("bal")) {
+
+                        System.out.println("DIS (AFTER CALL): ");
+                        for (int n: ModelRobot.getInstance().getDistrictMap().values()
+                        ) {
+                            System.out.println(n);
                         }
 
                     }
@@ -261,25 +289,28 @@ public class RobotProcess {
         }).start();
     }
 
-    private static void sendGrpcRequestToAllRobots() {
+    private static void checkRobotAlive() {
         Thread grpcRequestThread = new Thread(() -> {
             while (true) {
+
                 ArrayList<Robot> robotArrayList = ModelRobot.getInstance().getRobotArrayList();
+
+                //b_latch = new CountDownLatch(ModelRobot.getInstance().getRobotArrayList().size() -1);
 
                 for (Robot r : robotArrayList) {
                     if (!r.getID().equals(robot.getID())) {
                         try {
 
-                            RobotAlive robotAlive = new RobotAlive(r, 5000);
+                            RobotAlive robotAlive = new RobotAlive(r, 3000);
                             robotAlive.start();
 
                         } catch (Exception e) {
-                            System.out.println("I'm not able to contact robot: " + r.getID());
+                            e.printStackTrace();
                         }
                     }
                 }
                 try {
-                    Thread.sleep(10000); // Wait 10 seconds
+                    Thread.sleep(7000); // Wait 10 seconds
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -364,13 +395,11 @@ public class RobotProcess {
                     Thread.sleep(10000); //Every 10 seconds could be the chance
                 }
             } catch (Exception e) {
-                System.out.println("1");
                 System.out.println(e);
             }
         });
         mechanicThread.start();
     }
-
 }
 
 

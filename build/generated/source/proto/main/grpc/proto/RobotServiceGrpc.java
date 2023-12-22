@@ -182,6 +182,37 @@ public final class RobotServiceGrpc {
     return getRequestMechanicMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<proto.Grpc.RequestCheckDelete,
+      proto.Grpc.ResponseCheckDelete> getCheckDeleteMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "CheckDelete",
+      requestType = proto.Grpc.RequestCheckDelete.class,
+      responseType = proto.Grpc.ResponseCheckDelete.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<proto.Grpc.RequestCheckDelete,
+      proto.Grpc.ResponseCheckDelete> getCheckDeleteMethod() {
+    io.grpc.MethodDescriptor<proto.Grpc.RequestCheckDelete, proto.Grpc.ResponseCheckDelete> getCheckDeleteMethod;
+    if ((getCheckDeleteMethod = RobotServiceGrpc.getCheckDeleteMethod) == null) {
+      synchronized (RobotServiceGrpc.class) {
+        if ((getCheckDeleteMethod = RobotServiceGrpc.getCheckDeleteMethod) == null) {
+          RobotServiceGrpc.getCheckDeleteMethod = getCheckDeleteMethod =
+              io.grpc.MethodDescriptor.<proto.Grpc.RequestCheckDelete, proto.Grpc.ResponseCheckDelete>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "CheckDelete"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Grpc.RequestCheckDelete.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  proto.Grpc.ResponseCheckDelete.getDefaultInstance()))
+              .setSchemaDescriptor(new RobotServiceMethodDescriptorSupplier("CheckDelete"))
+              .build();
+        }
+      }
+    }
+    return getCheckDeleteMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -244,6 +275,13 @@ public final class RobotServiceGrpc {
       asyncUnimplementedUnaryCall(getRequestMechanicMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void checkDelete(proto.Grpc.RequestCheckDelete request,
+        io.grpc.stub.StreamObserver<proto.Grpc.ResponseCheckDelete> responseObserver) {
+      asyncUnimplementedUnaryCall(getCheckDeleteMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -281,6 +319,13 @@ public final class RobotServiceGrpc {
                 proto.Grpc.RequestMechanicRequest,
                 proto.Grpc.RequestMechanicResponse>(
                   this, METHODID_REQUEST_MECHANIC)))
+          .addMethod(
+            getCheckDeleteMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                proto.Grpc.RequestCheckDelete,
+                proto.Grpc.ResponseCheckDelete>(
+                  this, METHODID_CHECK_DELETE)))
           .build();
     }
   }
@@ -342,6 +387,14 @@ public final class RobotServiceGrpc {
       asyncUnaryCall(
           getChannel().newCall(getRequestMechanicMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void checkDelete(proto.Grpc.RequestCheckDelete request,
+        io.grpc.stub.StreamObserver<proto.Grpc.ResponseCheckDelete> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getCheckDeleteMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -395,6 +448,13 @@ public final class RobotServiceGrpc {
     public proto.Grpc.RequestMechanicResponse requestMechanic(proto.Grpc.RequestMechanicRequest request) {
       return blockingUnaryCall(
           getChannel(), getRequestMechanicMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public proto.Grpc.ResponseCheckDelete checkDelete(proto.Grpc.RequestCheckDelete request) {
+      return blockingUnaryCall(
+          getChannel(), getCheckDeleteMethod(), getCallOptions(), request);
     }
   }
 
@@ -455,6 +515,14 @@ public final class RobotServiceGrpc {
       return futureUnaryCall(
           getChannel().newCall(getRequestMechanicMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<proto.Grpc.ResponseCheckDelete> checkDelete(
+        proto.Grpc.RequestCheckDelete request) {
+      return futureUnaryCall(
+          getChannel().newCall(getCheckDeleteMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_NOTIFY_NEW_ROBOT = 0;
@@ -462,6 +530,7 @@ public final class RobotServiceGrpc {
   private static final int METHODID_ROBOT_ALIVE = 2;
   private static final int METHODID_BALANCE_DISTRICT = 3;
   private static final int METHODID_REQUEST_MECHANIC = 4;
+  private static final int METHODID_CHECK_DELETE = 5;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -499,6 +568,10 @@ public final class RobotServiceGrpc {
         case METHODID_REQUEST_MECHANIC:
           serviceImpl.requestMechanic((proto.Grpc.RequestMechanicRequest) request,
               (io.grpc.stub.StreamObserver<proto.Grpc.RequestMechanicResponse>) responseObserver);
+          break;
+        case METHODID_CHECK_DELETE:
+          serviceImpl.checkDelete((proto.Grpc.RequestCheckDelete) request,
+              (io.grpc.stub.StreamObserver<proto.Grpc.ResponseCheckDelete>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -566,6 +639,7 @@ public final class RobotServiceGrpc {
               .addMethod(getRobotAliveMethod())
               .addMethod(getBalanceDistrictMethod())
               .addMethod(getRequestMechanicMethod())
+              .addMethod(getCheckDeleteMethod())
               .build();
         }
       }

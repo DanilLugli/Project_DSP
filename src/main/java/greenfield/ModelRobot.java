@@ -3,7 +3,9 @@ package greenfield;
 import beans.Robot;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @XmlRootElement
@@ -25,6 +27,7 @@ public class ModelRobot {
         return instance;
     }
 
+    // ...
     private boolean robotRepairing;
 
     private boolean requestMechanic;
@@ -45,7 +48,7 @@ public class ModelRobot {
         this.robotRepairing = robotRepairing;
     }
 
-    public void incrementValue(Map<Integer, Integer> map, int key) {
+    public synchronized void incrementValue(Map<Integer, Integer> map, int key) {
 
         Integer value = map.get(key);
 
@@ -60,7 +63,7 @@ public class ModelRobot {
         }
     }
 
-    public void decrementValue(Map<Integer, Integer> map, int key) {
+    public synchronized void decrementValue(Map<Integer, Integer> map, int key) {
         Integer value = map.get(key);
 
         if (value != null) {
@@ -75,6 +78,20 @@ public class ModelRobot {
     }
 
     private Object mechanicLock = new Object();
+
+    public Object getExitLock() {
+        return exitLock;
+    }
+
+    private Object exitLock = new Object();
+
+    public Object getBalanceLock() {
+        return balanceLock;
+    }
+
+    private Object balanceLock = new Object();
+
+
 
     public Object getMechanicLock() {
         return mechanicLock;
@@ -112,7 +129,7 @@ public class ModelRobot {
         this.robotArrayList = robotArrayList;
     }
 
-    public void removeRobotById(String robotId) {
+    public synchronized void removeRobotById(String robotId) {
         synchronized (this.robotArrayList) {
             boolean removed = robotArrayList.removeIf(r -> r.getID().equals(robotId));
             System.out.println(removed ? "OK DELETED" : "ERROR: Robot not found!");
@@ -125,6 +142,15 @@ public class ModelRobot {
 
     public void setDistrictMap(Map<Integer, Integer> districtMap) {
         this.districtMap = districtMap;
+    }
+
+    public synchronized boolean containsRobotWithId(String robotId) {
+        synchronized (robotArrayList) {
+            synchronized (this.robotArrayList){
+                return robotArrayList.stream().anyMatch(robot -> robot.getID().equals(robotId));
+            }
+
+        }
     }
 
 }

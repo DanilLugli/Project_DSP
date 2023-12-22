@@ -64,12 +64,12 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
             ModelRobot.getInstance().decrementValue(ModelRobot.getInstance().getDistrictMap(), request.getDistrict());
 
             System.out.println("I've just deleted: " + robotId);
-            System.out.println("\nNow there are: ");
 
+            /*System.out.println("\nNow there are: ");
             for (Robot robot : ModelRobot.getInstance().getRobotArrayList()
             ) {
                 System.out.println(robot.getID());
-            }
+            }*/
 
             System.out.println("SITUA DIS (AFTER REMOVE): ");
             for (int n: ModelRobot.getInstance().getDistrictMap().values()
@@ -106,20 +106,16 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
     @Override
     public void balanceDistrict(Grpc.RobotBalanceRequest request, StreamObserver<Grpc.RobotBalanceResponse> responseObserver) {
 
-        ModelRobot.getInstance().decrementValue(ModelRobot.getInstance().getDistrictMap(), request.getOldDistrict());
-        ModelRobot.getInstance().incrementValue(ModelRobot.getInstance().getDistrictMap(), request.getNewDistrict());
+        synchronized (ModelRobot.getInstance().getDistrictMap()){
+            ModelRobot.getInstance().decrementValue(ModelRobot.getInstance().getDistrictMap(), request.getOldDistrict());
+            ModelRobot.getInstance().incrementValue(ModelRobot.getInstance().getDistrictMap(), request.getNewDistrict());
+        }
 
-        System.out.println("I've updated district !\n");
         Grpc.RobotBalanceResponse response = Grpc.RobotBalanceResponse
                 .newBuilder()
                 .setReply("OK")
                 .build();
 
-        /*System.out.println("SITUA DIS (AFTER BALANCE E CRASH): ");
-        for (int n: ModelRobot.getInstance().getDistrictMap().values()
-        ) {
-            System.out.println(n);
-        }*/
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
@@ -139,9 +135,11 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
         } else if (ModelRobot.getInstance().getRequestMechanic() && requestTimestamp > ModelRobot.getInstance().getCurrentRobot().getLamportTimestamp()){
 
             try {
+
                 synchronized (ModelRobot.getInstance().getMechanicLock()){
                     System.out.println("Attendi "+ request.getRobotId() + ", sei in wait()!");
                     ModelRobot.getInstance().getMechanicLock().wait();
+
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -152,11 +150,12 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
         } else if (ModelRobot.getInstance().getRobotRepairing()) {
 
             try {
+
                 synchronized (ModelRobot.getInstance().getMechanicLock()){
                     System.out.println("Attendi "+ request.getRobotId() +", Io " + ModelRobot.getInstance().getCurrentRobot().getID() + " la sto usando!");
                     ModelRobot.getInstance().getMechanicLock().wait();
-
                 }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -173,6 +172,33 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
         responseObserver.onCompleted();
     }
 
+    @Override
+    public void checkDelete(Grpc.RequestCheckDelete request, StreamObserver<Grpc.ResponseCheckDelete> responseObserver) {
+
+        boolean robotExist = ModelRobot.getInstance().containsRobotWithId(request.getRobotId());
+        Grpc.ResponseCheckDelete response = Grpc.ResponseCheckDelete
+                .newBuilder()
+                .setAck("OKK")
+                .build();
+
+        try
+        {
+            Thread.sleep(1500);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(!robotExist){
+            response = Grpc.ResponseCheckDelete
+                    .newBuilder()
+                    .setAck("OKK")
+                    .build();
+        }
+        //System.out.println("INVIO RESPONSE: " + response.getAck());
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
 }
 
 

@@ -31,10 +31,10 @@ public class StartServer {
         MQTTClient mqttPublisher = new MQTTClient(mqttBroker);
 
         // Subscribe to the "district" MQTT topic
+        subscribeToTopic("greenfield/pollution/district/0");
         subscribeToTopic("greenfield/pollution/district/1");
         subscribeToTopic("greenfield/pollution/district/2");
         subscribeToTopic("greenfield/pollution/district/3");
-        subscribeToTopic("greenfield/pollution/district/4");
 
 
         System.out.println("Hit return to stop...");

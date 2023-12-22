@@ -54,10 +54,19 @@ message RequestMechanicResponse {
   string reply = 1;
 }
 
+message RequestCheckDelete{
+  string robotId = 1;
+}
+
+message ResponseCheckDelete{
+  string ack = 1;
+}
+
 service RobotService {
   rpc NotifyNewRobot (RobotInfo) returns (RobotResponse);
   rpc removeRobot (RemoveRobotRequest) returns (RemoveRobotResponse);
   rpc RobotAlive (RobotAliveRequest) returns (RobotAliveResponse);
   rpc BalanceDistrict (RobotBalanceRequest) returns (RobotBalanceResponse);
   rpc RequestMechanic(RequestMechanicRequest) returns (RequestMechanicResponse);
+  rpc CheckDelete(RequestCheckDelete) returns (ResponseCheckDelete);
 }
