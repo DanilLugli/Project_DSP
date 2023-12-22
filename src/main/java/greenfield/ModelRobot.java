@@ -91,8 +91,6 @@ public class ModelRobot {
 
     private Object balanceLock = new Object();
 
-
-
     public Object getMechanicLock() {
         return mechanicLock;
     }

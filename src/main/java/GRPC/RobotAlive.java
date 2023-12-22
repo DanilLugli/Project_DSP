@@ -85,11 +85,9 @@ public class RobotAlive extends Thread {
 
             System.out.println("SIZE POST: " + ModelRobot.getInstance().getRobotArrayList().size() + "\n");
 
-            //request gRPC tutti hanno eliminato il robot mancante!
             ArrayList<Robot> iterList = new ArrayList<>(ModelRobot.getInstance().getRobotArrayList());
             for (Robot r: iterList
                  ) {
-
                 if (!r.getID().equals(ModelRobot.getInstance().getCurrentRobot().getID())) {
                     try {
 
@@ -162,7 +160,6 @@ public class RobotAlive extends Thread {
 
                                 try {
                                     ModelRobot.getInstance().getBalanceLock().wait();
-                                    System.out.println("Thread " + Thread.currentThread().getName() + " si è sbloccato dal wait.");
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
 
@@ -172,7 +169,6 @@ public class RobotAlive extends Thread {
 
                             try {
                                 ModelRobot.getInstance().getBalanceLock().wait();
-                                System.out.println("Thread " + Thread.currentThread().getName() + " si è sbloccato dal wait.");
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
 
