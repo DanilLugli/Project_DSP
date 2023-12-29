@@ -184,18 +184,18 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
         try
         {
             Thread.sleep(1500);
+            if(!robotExist){
+                response = Grpc.ResponseCheckDelete
+                        .newBuilder()
+                        .setAck("OKK")
+                        .build();
+            }
         }
         catch (Exception e){
             e.printStackTrace();
         }
 
-        if(!robotExist){
-            response = Grpc.ResponseCheckDelete
-                    .newBuilder()
-                    .setAck("OKK")
-                    .build();
-        }
-        //System.out.println("INVIO RESPONSE: " + response.getAck());
+
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }

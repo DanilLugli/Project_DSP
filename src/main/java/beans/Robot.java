@@ -69,13 +69,12 @@ public class Robot {
         this.ip = ip;
     }
 
-
     public void setDistrict(int district) {
         this.district = district;
     }
 
     public int getDistrict() {
-        return district;
+        return this.district;
     }
 
     public Position getPos() {
@@ -91,7 +90,8 @@ public class Robot {
         return "Robot:" +
                 "\n\t-id: " + id +
                 "\n\t-ip: " + ip +
-                "\n\t-port: " + port + "\n";
+                "\n\t-port: " + port +
+                "\n\t-district: " + getDistrict() + "\n";
     }
 }
 

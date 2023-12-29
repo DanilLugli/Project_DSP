@@ -31,8 +31,6 @@ public class BalanceDistrict extends Thread {
 
         RobotServiceGrpc.RobotServiceBlockingStub stub = RobotServiceGrpc.newBlockingStub(channel);
 
-
-        //int oldDistrict = s.getDistrict();
         Grpc.RobotBalanceRequest request = Grpc.RobotBalanceRequest.newBuilder()
                 .setOldDistrict(oldDistrict)
                 .setNewDistrict(newDistrict)

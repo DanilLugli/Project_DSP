@@ -1,10 +1,12 @@
 package GRPC;
 
 import beans.Robot;
+import beans.RobotModels;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import greenfield.ModelRobot;
+import greenfield.RobotProcess;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -24,8 +26,6 @@ public class RobotAlive extends Thread {
     private int oldDistrict;
 
     private int c_count = 0;
-
-
 
 
     public RobotAlive(Robot r, int timeoutMs) {
@@ -105,7 +105,6 @@ public class RobotAlive extends Thread {
                         try {
 
                             response = stub.checkDelete(request);
-                            //System.out.println("R: " + response.getAck());
                             if(response.getAck().equals("OKK"))
                                 c_count ++;
 
@@ -116,7 +115,6 @@ public class RobotAlive extends Thread {
                         channel.shutdownNow();
 
                     } catch (Exception e) {
-                        System.out.println("3");
                         e.printStackTrace();
                     }
                 }
@@ -140,6 +138,7 @@ public class RobotAlive extends Thread {
                                     ModelRobot.getInstance().getCurrentRobot().setDistrict(getMinDistrict());
                                     System.out.println(ModelRobot.getInstance().getCurrentRobot().getID() + " is in NEW DISTRICT: " + getMinDistrict() );
                                     ModelRobot.getInstance().incrementValue(ModelRobot.getInstance().getDistrictMap(), getMinDistrict());
+                                    ModelRobot.getInstance().getCurrentRobot().setPos(RobotModels.updatePos(getMinDistrict()));
 
                                 }
 
@@ -156,10 +155,30 @@ public class RobotAlive extends Thread {
 
                                 System.out.println("Me " + ModelRobot.getInstance().getCurrentRobot().getID() + " CHANGE district to balance Greenfield!");
 
-                            }else{
+                                RobotProcess.stopSensorSend();
+                                ModelRobot.setRunning(true);
+                                RobotProcess.sensorSend();
 
+                                Client client2 = Client.create();
+                                WebResource webResource2 = client2.resource("http://localhost:1993/Robot/update/" + ModelRobot.getInstance().getCurrentRobot().getID() + "/" + ModelRobot.getInstance().getCurrentRobot().getDistrict());
+                                ClientResponse result2 = webResource2.type("application/json").put(ClientResponse.class);
+
+                                System.out.println("AAA " + result2);
+
+                                synchronized (ModelRobot.getInstance().getBalanceLock()) {
+                                    try{
+                                        Thread.sleep(1000);
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+
+                                    ModelRobot.getInstance().getBalanceLock().notifyAll();
+                                }
+
+                            }else{
                                 try {
                                     ModelRobot.getInstance().getBalanceLock().wait();
+                                    System.out.println("UNLOCKED - OK !");
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
 
@@ -169,21 +188,18 @@ public class RobotAlive extends Thread {
 
                             try {
                                 ModelRobot.getInstance().getBalanceLock().wait();
+                                System.out.println("UNLOCKED - OK !");
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
 
                             }
                         }
 
-                        synchronized (ModelRobot.getInstance().getBalanceLock()) {
-                            System.out.println("Do notify!");
-                            ModelRobot.getInstance().getBalanceLock().notifyAll();
-                        }
+
                     }
                 }
 
             }
-
             System.out.println("<- GREENFIELD ALREADY BALANCE ->");
         }
     }

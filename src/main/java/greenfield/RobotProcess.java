@@ -34,6 +34,7 @@ public class RobotProcess {
     static MQTTClient mqttPublisher = new MQTTClient("tcp://localhost:1883");
 
 
+
     public static void main(String[] args) throws IOException {
         robotId = "Robot" + (int) Math.floor(Math.random() * (20 - 1 + 1) + 1);
         robotPort = (int) Math.floor(Math.random() * (9021 - 8080)) + 8080;
@@ -52,6 +53,7 @@ public class RobotProcess {
         System.out.print("Write 'exit' if you want to quit Greenfield... \n");
 
         try {
+
             Client client = Client.create();
             WebResource webResource = client.resource("http://localhost:1993/Robot/addRobot");
             String input = "{\n" +
@@ -61,7 +63,7 @@ public class RobotProcess {
 
             Date date = new Date();
             long lamportTimestamp = date.getTime();
-            //CREATE NEW OBJECT ROBOT
+
             robot = new Robot(robotId, robotIp, robotPort, lamportTimestamp);
 
             ClientResponse result = webResource.type("application/json").put(ClientResponse.class, robot);
@@ -74,6 +76,7 @@ public class RobotProcess {
 
                 System.out.println("<-- Hi, I'm "+ robotId + " -->");
                 System.out.println("From: " + coordRobot.getDistrict());
+                System.out.println("Robot: " + robot.hashCode());
 
                 ModelRobot modelRobot = ModelRobot.getInstance();
                 modelRobot.setRobot(robot);
@@ -178,13 +181,19 @@ public class RobotProcess {
         sensorThread.start();
     }
 
-    private static void sensorSend() {
+    static Thread sendThread = null;
 
+    public static void sensorSend() {
 
-        String topic = "greenfield/pollution/district/" + coordRobot.getDistrict();
+        String topic = "greenfield/pollution/district/" + robot.getDistrict();
 
-        Thread sendThread = new Thread(() -> {
-            while (true) {
+        if (sendThread != null && sendThread.isAlive()) {
+            sendThread.interrupt();
+        }
+
+         sendThread = new Thread(() -> {
+            while (ModelRobot.isRunning()) {
+
                 if (!measurementList.isEmpty()) {
                     Measurement measurement = measurementList.remove(0);
                     String payload = robotId + "," + Double.toString(measurement.getValue()) + "," + Long.toString(measurement.getTimestamp());
@@ -194,14 +203,21 @@ public class RobotProcess {
                 try {
                     Thread.sleep(15000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
+                    break;
                 }
             }
         });
 
-        // Avvia il thread
         sendThread.start();
     }
+
+    public static void stopSensorSend() {
+        if (sendThread != null && sendThread.isAlive()) {
+            sendThread.interrupt();
+        }
+    }
+
 
     private static void manageRobotExit() {
         ArrayList<Robot> robotArrayList = ModelRobot.getInstance().getRobotArrayList();
@@ -265,7 +281,7 @@ public class RobotProcess {
                             ClientResponse result = webResource.type("application/json").delete(ClientResponse.class);
 
                             if (result.getStatus() == 200) {
-                                System.out.println("Delete from network: OK");
+                                System.out.println("Delete from network: OK!");
                                 System.exit(0);
                             }
 
@@ -335,7 +351,7 @@ public class RobotProcess {
 
                         CountDownLatch latch;
                         ModelRobot.getInstance().setRequestMechanic(true);
-                        latch = new CountDownLatch(iterList.size() -1);
+                        latch = new CountDownLatch(iterList.size() -1);   //meno me stesso
 
                         ModelRobot.getInstance().getCurrentRobot().incrementLamportTimestamp();
                         System.out.println("\nMaking Mechanic Request...");
@@ -370,13 +386,12 @@ public class RobotProcess {
                                     channel.shutdownNow();
 
                                 } catch (Exception e) {
-                                    System.out.println("3");
                                     e.printStackTrace();
                                 }
                             }
                         }
 
-                        latch.await();
+                        latch.await();  //quando arriva a zero parte
 
                         ModelRobot.getInstance().setRequestMechanic(false);
 
@@ -400,6 +415,7 @@ public class RobotProcess {
         });
         mechanicThread.start();
     }
+
 }
 
 

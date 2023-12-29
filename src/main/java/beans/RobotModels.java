@@ -10,12 +10,9 @@ import java.util.concurrent.ThreadLocalRandom;
 @XmlRootElement
 @XmlAccessorType
 public class RobotModels {
-    private static ArrayList<Robot> listRobot;  //Lista effettiva dei robot
-
+    private static ArrayList<Robot> listRobot;
 
     private final int[] arrayDistrict = new int[4];
-
-    //private static int[] numRobotDistrict = new int[4];
 
     private static RobotModels instance;
 
@@ -41,8 +38,6 @@ public class RobotModels {
         }
     }
 
-
-
     public Robot getById(String id){
         for (Robot rob : this.getListRobot()){
             if(rob.getID().equals(id))
@@ -51,9 +46,7 @@ public class RobotModels {
         return null;
     }
 
-
-    public int randomCoord(int min, int max) {
-        //Random rd = new Random();
+    public static int randomCoord(int min, int max) {
         int pos = ThreadLocalRandom.current().nextInt(min, max + 1);
         return pos;
     }
@@ -112,12 +105,15 @@ public class RobotModels {
             if (rob.getID().equals(robot.getID()))
                 return null;
         }
+
         Position p = new Position() ;
         robot.setPos(settingDistrict(robot));
         int district = robot.getDistrict();
+
         synchronized (listRobot) {
             this.listRobot.add(robot);
         }
+
         return new CoordRobot(listRobot, p , district);
     }
 
@@ -133,6 +129,31 @@ public class RobotModels {
         }
         System.out.println("It's not able to delete this robot. ");
         return false;
+    }
+
+    public static Position updatePos(int district) {
+        Position p = new Position();
+        switch (district) {
+            case 0:
+                p.setX(randomCoord(0, 5));
+                p.setY(randomCoord(0, 5));
+                break;
+            case 1:
+                p.setX(randomCoord(6, 10));
+                p.setY(randomCoord(0, 5));
+                break;
+            case 2:
+                p.setX(randomCoord(0, 5));
+                p.setY(randomCoord(6, 10));
+                break;
+            case 3:
+                p.setX(randomCoord(6, 10));
+                p.setY(randomCoord(6, 10));
+                break;
+            default:
+                throw new IllegalArgumentException("Distretto non valido: " + district);
+        }
+        return p;
     }
 
 

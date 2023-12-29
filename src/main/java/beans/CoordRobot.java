@@ -4,7 +4,7 @@ package beans;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 
-//Classe per calcolare le coordinate di un robot
+
 @XmlRootElement
 public class CoordRobot {
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 @XmlRootElement
 public class RobotList {
+
     private List<Robot> robots;
 
     public RobotList(List<Robot> robots) {

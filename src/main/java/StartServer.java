@@ -72,7 +72,7 @@ public class StartServer {
 
                     Pollution p = new Pollution(pm_10, timestamp);
                     PollutionModels.getInstance().addPollution(rID, p);
-                    System.out.println("Received message by on topic '" + topic + "': " + payload);
+                    System.out.println("Received message on topic '" + topic + "': " + payload);
 
                 }
                 @Override

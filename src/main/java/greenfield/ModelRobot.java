@@ -11,6 +11,16 @@ import java.util.Map;
 @XmlRootElement
 public class ModelRobot {
 
+
+    public static boolean isRunning() {
+        return running;
+    }
+
+    public static void setRunning(boolean running) {
+        ModelRobot.running = running;
+    }
+
+    private static volatile boolean running = true;
     private Robot robot;
     private ArrayList<Robot> robotArrayList;
     public Map<Integer, Integer> districtMap = new HashMap<Integer, Integer>(){{

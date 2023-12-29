@@ -4,7 +4,6 @@ import beans.CoordRobot;
 import beans.Robot;
 import beans.RobotList;
 import beans.RobotModels;
-import com.google.gson.Gson;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -55,6 +54,22 @@ public class RobotRequest {
             return Response.ok(c).build();
         else
             return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    @Path("/update/{robotId}/{district}")
+    @PUT
+    @Produces({"application/json", "application/xml"})
+    public Response updateDistrict(@PathParam("district") int district, @PathParam("robotId") String robotdId){
+        ArrayList<Robot> l = RobotModels.getInstance().getListRobot();
+        for (Robot r: l
+             ) {
+            if(r.getID().equals(robotdId)){
+                r.setDistrict(district);
+                System.out.println("--> Robot " + robotdId + "has changed district. NEW district: " + district + "\n");
+                return Response.status(200).build();
+            }else return Response.status(300).build();
+        }
+        return Response.status(300).build();
     }
 
 }
