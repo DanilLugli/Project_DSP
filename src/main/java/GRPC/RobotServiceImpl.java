@@ -116,6 +116,8 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
                 .setReply("OK")
                 .build();
 
+        System.out.println("IMPORTANT: " + request.getStatus() + " has changed his district, NEW DISTRICT: " + request.getNewDistrict());
+
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
@@ -125,6 +127,9 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
     public void requestMechanic(Grpc.RequestMechanicRequest request, StreamObserver<Grpc.RequestMechanicResponse> responseObserver) {
 
         long requestTimestamp = request.getTimestamp();
+
+        ModelRobot.getInstance().getCurrentRobot().updateLamportTimestamp(requestTimestamp);
+
 
         Grpc.RequestMechanicResponse response;
 
@@ -137,7 +142,7 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
             try {
 
                 synchronized (ModelRobot.getInstance().getMechanicLock()){
-                    System.out.println("Attendi "+ request.getRobotId() + ", sei in wait()!");
+                    System.out.println("WAIT: "+ request.getRobotId() + ", you have to wait!");
                     ModelRobot.getInstance().getMechanicLock().wait();
 
                 }
@@ -152,7 +157,7 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
             try {
 
                 synchronized (ModelRobot.getInstance().getMechanicLock()){
-                    System.out.println("Attendi "+ request.getRobotId() +", Io " + ModelRobot.getInstance().getCurrentRobot().getID() + " la sto usando!");
+                    System.out.println("WAIT: "+ request.getRobotId() +", " + ModelRobot.getInstance().getCurrentRobot().getID() + " is to mechanic!");
                     ModelRobot.getInstance().getMechanicLock().wait();
                 }
 

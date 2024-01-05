@@ -60,16 +60,16 @@ public class RobotRequest {
     @PUT
     @Produces({"application/json", "application/xml"})
     public Response updateDistrict(@PathParam("district") int district, @PathParam("robotId") String robotdId){
-        ArrayList<Robot> l = RobotModels.getInstance().getListRobot();
-        for (Robot r: l
-             ) {
-            if(r.getID().equals(robotdId)){
-                r.setDistrict(district);
-                System.out.println("--> Robot " + robotdId + "has changed district. NEW district: " + district + "\n");
-                return Response.status(200).build();
-            }else return Response.status(300).build();
+        synchronized (RobotModels.getInstance().getListRobot()) {
+            ArrayList<Robot> l = RobotModels.getInstance().getListRobot();
+            for (Robot r: l) {
+                if(r.getID().equals(robotdId)){
+                    r.setDistrict(district);
+                    System.out.println("--> Robot " + robotdId + " has changed district. NEW district: " + district + "\n");
+                    return Response.status(200).entity("Robot " + robotdId + " has changed district to " + district).build();
+                }
+            }
         }
-        return Response.status(300).build();
+        return Response.status(404).entity("Robot " + robotdId + " not found").build();
     }
-
 }

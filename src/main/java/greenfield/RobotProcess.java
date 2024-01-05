@@ -16,12 +16,12 @@ import proto.RobotServiceGrpc;
 import simulators.BufferImpl;
 import simulators.Measurement;
 import simulators.PM10Simulator;
+import utils.My_CountdownLatch;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
-import java.util.concurrent.CountDownLatch;
 
 public class RobotProcess {
     static Robot robot;
@@ -36,7 +36,7 @@ public class RobotProcess {
 
 
     public static void main(String[] args) throws IOException {
-        robotId = "Robot" + (int) Math.floor(Math.random() * (20 - 1 + 1) + 1);
+        robotId = "Robot" + (int) Math.floor(Math.random() * (50 - 1 + 1) + 1);
         robotPort = (int) Math.floor(Math.random() * (9021 - 8080)) + 8080;
         robotIp = "localhost";
 
@@ -83,7 +83,7 @@ public class RobotProcess {
                 modelRobot.setRobotArrayList(coordRobot.getRobotsList());
                 modelRobot.incrementValue(modelRobot.getDistrictMap(), robot.getDistrict());
 
-                System.out.println("\n\nFOR --> " + modelRobot.getCurrentRobot().getID() + " the instance of Model Robot is : " + modelRobot + "\n\n");
+                //System.out.println("\nFOR --> " + modelRobot.getCurrentRobot().getID() + " the instance of Model Robot is : " + modelRobot + "\n");
 
 
                 if (modelRobot.getRobotArrayList().isEmpty()) {
@@ -119,7 +119,7 @@ public class RobotProcess {
             requestMechanic();
 
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
     }
@@ -144,7 +144,7 @@ public class RobotProcess {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -196,7 +196,7 @@ public class RobotProcess {
 
                 if (!measurementList.isEmpty()) {
                     Measurement measurement = measurementList.remove(0);
-                    String payload = robotId + "," + Double.toString(measurement.getValue()) + "," + Long.toString(measurement.getTimestamp());
+                    String payload = robotId + "," + (measurement.getValue()) + "," + (measurement.getTimestamp());
                     mqttPublisher.publishToTopic(topic, payload);
                 }
 
@@ -217,7 +217,6 @@ public class RobotProcess {
             sendThread.interrupt();
         }
     }
-
 
     private static void manageRobotExit() {
         ArrayList<Robot> robotArrayList = ModelRobot.getInstance().getRobotArrayList();
@@ -300,7 +299,7 @@ public class RobotProcess {
                     }
                 }
             } catch (Exception e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }).start();
     }
@@ -310,8 +309,6 @@ public class RobotProcess {
             while (true) {
 
                 ArrayList<Robot> robotArrayList = ModelRobot.getInstance().getRobotArrayList();
-
-                //b_latch = new CountDownLatch(ModelRobot.getInstance().getRobotArrayList().size() -1);
 
                 for (Robot r : robotArrayList) {
                     if (!r.getID().equals(robot.getID())) {
@@ -344,15 +341,15 @@ public class RobotProcess {
             try {
                 while (true) {
 
-                    //Create a copy of list, problem when add a new robot while work on list
                     ArrayList<Robot> iterList = new ArrayList<>(ModelRobot.getInstance().getRobotArrayList());
 
                     if (Math.random() <= 0.1) { //10% of chance
 
-                        CountDownLatch latch;
+                        My_CountdownLatch latch;
                         ModelRobot.getInstance().setRequestMechanic(true);
-                        latch = new CountDownLatch(iterList.size() -1);   //meno me stesso
+                        latch = new My_CountdownLatch(iterList.size() -1);
 
+                        //LAMPORT - SEND MESSAGE
                         ModelRobot.getInstance().getCurrentRobot().incrementLamportTimestamp();
                         System.out.println("\nMaking Mechanic Request...");
 
@@ -391,7 +388,7 @@ public class RobotProcess {
                             }
                         }
 
-                        latch.await();  //quando arriva a zero parte
+                        latch.await();
 
                         ModelRobot.getInstance().setRequestMechanic(false);
 
@@ -403,6 +400,8 @@ public class RobotProcess {
                         ModelRobot.getInstance().setRobotRepairing(false);
                         System.out.println("...ASSISTANCE FINISHED! <--\n");
 
+                        ModelRobot.getInstance().getCurrentRobot().updateLamportTimestamp(ModelRobot.getInstance().getCurrentRobot().getLamportTimestamp());
+
                         synchronized (ModelRobot.getInstance().getMechanicLock()){
                             ModelRobot.getInstance().getMechanicLock().notifyAll();
                         }
@@ -410,7 +409,7 @@ public class RobotProcess {
                     Thread.sleep(10000); //Every 10 seconds could be the chance
                 }
             } catch (Exception e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         });
         mechanicThread.start();

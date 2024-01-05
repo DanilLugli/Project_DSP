@@ -37,23 +37,11 @@ public class BalanceDistrict extends Thread {
                 .setStatus(s.getID())
                 .build();
 
-        /*
-        //System.out.println(ModelRobot.getInstance().getCurrentRobot().getDistrict());
-        ModelRobot.getInstance().getCurrentRobot().setDistrict(newDistrict);
-        //System.out.println(ModelRobot.getInstance().getCurrentRobot().getDistrict());
-
-        ModelRobot.getInstance().decrementValue(ModelRobot.getInstance().getDistrictMap(), oldDistrict);
-        ModelRobot.getInstance().incrementValue(ModelRobot.getInstance().getDistrictMap(), newDistrict);
-        */
-
 
         try {
 
             Grpc.RobotBalanceResponse response = stub.balanceDistrict(request);
-            System.out.println("Response Balance: "+response);
-            //System.out.println("I've updated my district!");
-            //System.out.println(response.getReply());
-            //ModelRobot.getInstance().getBalanceLock().notifyAll();
+            //System.out.println("Response Balance: "+response);
 
         } catch (Exception e) {
             e.printStackTrace();

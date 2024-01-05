@@ -11,6 +11,17 @@ import java.util.Map;
 @XmlRootElement
 public class ModelRobot {
 
+    private static volatile boolean isDistrictChanging = false;
+
+    public static boolean isDistrictChanging() {
+        return isDistrictChanging;
+    }
+
+    public static void setDistrictChanging(boolean isChanging) {
+        isDistrictChanging = isChanging;
+    }
+
+
 
     public static boolean isRunning() {
         return running;

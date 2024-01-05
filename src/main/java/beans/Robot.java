@@ -42,14 +42,13 @@ public class Robot {
 
     public synchronized void incrementLamportTimestamp() {
         this.lamportTimestamp++;
-        this.lamportTimestamp += offset;
+        //this.lamportTimestamp += offset;
     }
 
     public synchronized void updateLamportTimestamp(long receivedTimestamp) {
         lamportTimestamp = Math.max(lamportTimestamp, receivedTimestamp) + 1;
-        lamportTimestamp += offset;
+        //lamportTimestamp += offset;
     }
-
 
     public String getID() {return id;}
 

@@ -62,16 +62,16 @@ public class RobotAlive extends Thread {
     private void handleTimeout() {
         if (!responseReceived) {
 
-            System.out.println("ATTENTION I'm "
+            System.out.println("--> ATTENTION I'm "
                     + ModelRobot.getInstance().getCurrentRobot().getID()
                     +" --> TIMEOUT: No answer from "
                     + r.getID()
                     + " within "
                     + timeoutMs
-                    + " ms");
+                    + " ms !");
 
 
-            System.out.println("\nSIZE PRE: " + ModelRobot.getInstance().getRobotArrayList().size());
+            //System.out.println("\nSIZE PRE: " + ModelRobot.getInstance().getRobotArrayList().size());
 
             removeRobot(r.getID(), r.getDistrict());
 
@@ -80,10 +80,8 @@ public class RobotAlive extends Thread {
             ClientResponse result = webResource.type("application/json").delete(ClientResponse.class);
 
             if (result.getStatus() == 200) {
-                System.out.println("Delete from network after Crash by: " + r.getID() + " OK");
+                System.out.println("Delete from network after Crash by: " + r.getID() + " -> OK.\n");
             }
-
-            System.out.println("SIZE POST: " + ModelRobot.getInstance().getRobotArrayList().size() + "\n");
 
             ArrayList<Robot> iterList = new ArrayList<>(ModelRobot.getInstance().getRobotArrayList());
             for (Robot r: iterList
@@ -121,86 +119,68 @@ public class RobotAlive extends Thread {
             }
 
             if(c_count == iterList.size() -1){
-                System.out.println("<-- START BALANCE DISTRICT PROCESS -->");
-
+                System.out.println("\n-> START BALANCE DISTRICT PROCESS");
                 while (!checkBalance()){
-                    synchronized (ModelRobot.getInstance().getBalanceLock()) {
-                        ArrayList<Robot> rList = new ArrayList<>(ModelRobot.getInstance().getRobotArrayList());
-                        if(ModelRobot.getInstance().getCurrentRobot().getDistrict() == getMaxDistrict()){  //if MY district
-                            if(highID(ModelRobot.getInstance().getCurrentRobot())){      //if I'M highest
+                    ArrayList<Robot> rList = new ArrayList<>(ModelRobot.getInstance().getRobotArrayList());
+                    if(ModelRobot.getInstance().getCurrentRobot().getDistrict() == getMaxDistrict() && highID(ModelRobot.getInstance().getCurrentRobot())){  //if MY district
 
-                                System.out.println(ModelRobot.getInstance().getCurrentRobot().getDistrict() + " OLD.");
+                        ModelRobot.setDistrictChanging(true);
+                        System.out.println(ModelRobot.getInstance().getCurrentRobot().getID() + " CHANGE district to balance Greenfield!");
+                        System.out.println(ModelRobot.getInstance().getCurrentRobot().getDistrict() + " DISTRICT OLD.");
 
-                                synchronized (ModelRobot.getInstance().getDistrictMap()){
+                        synchronized (ModelRobot.getInstance().getDistrictMap()){
 
-                                    ModelRobot.getInstance().decrementValue(ModelRobot.getInstance().getDistrictMap(), ModelRobot.getInstance().getCurrentRobot().getDistrict());
-                                    oldDistrict = ModelRobot.getInstance().getCurrentRobot().getDistrict();
-                                    ModelRobot.getInstance().getCurrentRobot().setDistrict(getMinDistrict());
-                                    System.out.println(ModelRobot.getInstance().getCurrentRobot().getID() + " is in NEW DISTRICT: " + getMinDistrict() );
-                                    ModelRobot.getInstance().incrementValue(ModelRobot.getInstance().getDistrictMap(), getMinDistrict());
-                                    ModelRobot.getInstance().getCurrentRobot().setPos(RobotModels.updatePos(getMinDistrict()));
+                            ModelRobot.getInstance().decrementValue(ModelRobot.getInstance().getDistrictMap(), ModelRobot.getInstance().getCurrentRobot().getDistrict());
+                            oldDistrict = ModelRobot.getInstance().getCurrentRobot().getDistrict();
+                            ModelRobot.getInstance().getCurrentRobot().setDistrict(getMinDistrict());
+                            System.out.println(ModelRobot.getInstance().getCurrentRobot().getID() + " is in NEW DISTRICT: " + getMinDistrict() );
+                            ModelRobot.getInstance().incrementValue(ModelRobot.getInstance().getDistrictMap(), getMinDistrict());
+                            ModelRobot.getInstance().getCurrentRobot().setPos(RobotModels.updatePos(getMinDistrict()));
 
-                                }
+                        }
 
-                                System.out.println(ModelRobot.getInstance().getCurrentRobot().getDistrict() + " NEW.\n");
+                        System.out.println(ModelRobot.getInstance().getCurrentRobot().getDistrict() + " DISTRICT NEW.\n");
 
-                                for (Robot r : rList) {
-                                    if (!r.getID().equals(ModelRobot.getInstance().getCurrentRobot().getID())) {
+                        for (Robot r : rList) {
+                            if (!r.getID().equals(ModelRobot.getInstance().getCurrentRobot().getID())) {
 
-                                        BalanceDistrict balanceDistrict = new BalanceDistrict(ModelRobot.getInstance().getCurrentRobot(), r, ModelRobot.getInstance().getCurrentRobot().getDistrict(), oldDistrict);
-                                        balanceDistrict.start();
+                                BalanceDistrict balanceDistrict = new BalanceDistrict(ModelRobot.getInstance().getCurrentRobot(), r, ModelRobot.getInstance().getCurrentRobot().getDistrict(), oldDistrict);
+                                balanceDistrict.start();
 
-                                    }
-                                }
-
-                                System.out.println("Me " + ModelRobot.getInstance().getCurrentRobot().getID() + " CHANGE district to balance Greenfield!");
-
-                                RobotProcess.stopSensorSend();
-                                ModelRobot.setRunning(true);
-                                RobotProcess.sensorSend();
-
-                                Client client2 = Client.create();
-                                WebResource webResource2 = client2.resource("http://localhost:1993/Robot/update/" + ModelRobot.getInstance().getCurrentRobot().getID() + "/" + ModelRobot.getInstance().getCurrentRobot().getDistrict());
-                                ClientResponse result2 = webResource2.type("application/json").put(ClientResponse.class);
-
-                                System.out.println("AAA " + result2);
-
-                                synchronized (ModelRobot.getInstance().getBalanceLock()) {
-                                    try{
-                                        Thread.sleep(1000);
-                                    }catch (Exception e){
-                                        e.printStackTrace();
-                                    }
-
-                                    ModelRobot.getInstance().getBalanceLock().notifyAll();
-                                }
-
-                            }else{
-                                try {
-                                    ModelRobot.getInstance().getBalanceLock().wait();
-                                    System.out.println("UNLOCKED - OK !");
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-
-                                }
                             }
-                        }else{
+                        }
 
+                        RobotProcess.stopSensorSend();
+                        ModelRobot.setRunning(true);
+                        RobotProcess.sensorSend();
+
+                        Client client2 = Client.create();
+                        WebResource webResource2 = client2.resource("http://localhost:1993/Robot/update/" + ModelRobot.getInstance().getCurrentRobot().getID() + "/" + ModelRobot.getInstance().getCurrentRobot().getDistrict());
+                        ClientResponse result2 = webResource2.type("application/json").put(ClientResponse.class);
+
+                        System.out.println("HTTP Result: " + result2);
+
+                        ModelRobot.setDistrictChanging(false);
+
+                        synchronized (ModelRobot.getInstance().getBalanceLock()){
+                            ModelRobot.getInstance().getBalanceLock().notifyAll();
+                        }
+
+                    }
+                    else{
+                        synchronized (ModelRobot.getInstance().getBalanceLock()){
                             try {
+                                //System.out.println("Going to wait 1.");
                                 ModelRobot.getInstance().getBalanceLock().wait();
-                                System.out.println("UNLOCKED - OK !");
+                                //System.out.println("UNLOCKED - OK !");
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
 
                             }
                         }
-
-
                     }
                 }
-
             }
-            System.out.println("<- GREENFIELD ALREADY BALANCE ->");
         }
     }
 
