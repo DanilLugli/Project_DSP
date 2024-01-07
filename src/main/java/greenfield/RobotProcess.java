@@ -76,7 +76,8 @@ public class RobotProcess {
 
                 System.out.println("<-- Hi, I'm "+ robotId + " -->");
                 System.out.println("From: " + coordRobot.getDistrict());
-                System.out.println("Robot: " + robot.hashCode());
+                //System.out.println("Robot: " + robot.hashCode());
+                System.out.println("Lamport: " + robot.getLamportTimestamp());
 
                 ModelRobot modelRobot = ModelRobot.getInstance();
                 modelRobot.setRobot(robot);
@@ -194,10 +195,20 @@ public class RobotProcess {
          sendThread = new Thread(() -> {
             while (ModelRobot.isRunning()) {
 
+                synchronized (ModelRobot.getInstance().getMechanicLock()){
+                    try{
+                        ModelRobot.getInstance().getMechanicLock().wait();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+
                 if (!measurementList.isEmpty()) {
                     Measurement measurement = measurementList.remove(0);
                     String payload = robotId + "," + (measurement.getValue()) + "," + (measurement.getTimestamp());
                     mqttPublisher.publishToTopic(topic, payload);
+                    System.out.println("Publish MQTT district " + robot.getDistrict()+ " : "+ payload.split(",")[1]);
                 }
 
                 try {
@@ -238,7 +249,6 @@ public class RobotProcess {
                                 }
 
                             }
-
                         }
 
                         try{
@@ -295,7 +305,6 @@ public class RobotProcess {
                         ) {
                             System.out.println(n);
                         }
-
                     }
                 }
             } catch (Exception e) {
@@ -343,7 +352,7 @@ public class RobotProcess {
 
                     ArrayList<Robot> iterList = new ArrayList<>(ModelRobot.getInstance().getRobotArrayList());
 
-                    if (Math.random() <= 0.1) { //10% of chance
+                    if (Math.random() <= 0.4) { //10% of chance
 
                         My_CountdownLatch latch;
                         ModelRobot.getInstance().setRequestMechanic(true);
@@ -351,8 +360,8 @@ public class RobotProcess {
 
                         //LAMPORT - SEND MESSAGE
                         ModelRobot.getInstance().getCurrentRobot().incrementLamportTimestamp();
-                        System.out.println("\nMaking Mechanic Request...");
-
+                        System.out.println("\nMaking MECHANIC Request...");
+                        System.out.println("TIME: " + ModelRobot.getInstance().getCurrentRobot().getLamportTimestamp());
                         for (Robot r : iterList) {
                             if (!r.getID().equals(ModelRobot.getInstance().getCurrentRobot().getID())) {
                                 try {
@@ -395,7 +404,7 @@ public class RobotProcess {
                         System.out.println("\n--> RECEIVING ASSISTANCE FROM MECHANIC...");
                         ModelRobot.getInstance().setRobotRepairing(true);
 
-                        Thread.sleep(10000);
+                        Thread.sleep(20000);
 
                         ModelRobot.getInstance().setRobotRepairing(false);
                         System.out.println("...ASSISTANCE FINISHED! <--\n");

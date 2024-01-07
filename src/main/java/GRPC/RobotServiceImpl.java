@@ -127,8 +127,9 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
     public void requestMechanic(Grpc.RequestMechanicRequest request, StreamObserver<Grpc.RequestMechanicResponse> responseObserver) {
 
         long requestTimestamp = request.getTimestamp();
-
-        ModelRobot.getInstance().getCurrentRobot().updateLamportTimestamp(requestTimestamp);
+        System.out.println("\nCURRENT: " + ModelRobot.getInstance().getCurrentRobot().getID());
+        System.out.println("REQUEST ROBOT: " + request.getRobotId());
+        System.out.println("REQUEST TIME: " + requestTimestamp + "\n");
 
 
         Grpc.RequestMechanicResponse response;
@@ -137,12 +138,12 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
 
             response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
 
-        } else if (ModelRobot.getInstance().getRequestMechanic() && requestTimestamp > ModelRobot.getInstance().getCurrentRobot().getLamportTimestamp()){
+        } else if (ModelRobot.getInstance().getRequestMechanic() && requestTimestamp >= ModelRobot.getInstance().getCurrentRobot().getLamportTimestamp()){
 
             try {
 
                 synchronized (ModelRobot.getInstance().getMechanicLock()){
-                    System.out.println("WAIT: "+ request.getRobotId() + ", you have to wait!");
+                    System.out.println("WAIT "+ request.getRobotId() + ", you have to wait!");
                     ModelRobot.getInstance().getMechanicLock().wait();
 
                 }
@@ -157,7 +158,7 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
             try {
 
                 synchronized (ModelRobot.getInstance().getMechanicLock()){
-                    System.out.println("WAIT: "+ request.getRobotId() +", " + ModelRobot.getInstance().getCurrentRobot().getID() + " is to mechanic!");
+                    System.out.println("WAIT "+ request.getRobotId() +", " + ModelRobot.getInstance().getCurrentRobot().getID() + " is to mechanic!");
                     ModelRobot.getInstance().getMechanicLock().wait();
                 }
 
@@ -172,6 +173,9 @@ public class RobotServiceImpl extends RobotServiceGrpc.RobotServiceImplBase {
             response = Grpc.RequestMechanicResponse.newBuilder().setReply("OK").build();
 
         }
+
+
+        ModelRobot.getInstance().getCurrentRobot().updateLamportTimestamp(requestTimestamp);
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();

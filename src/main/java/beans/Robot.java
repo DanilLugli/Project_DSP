@@ -42,7 +42,7 @@ public class Robot {
 
     public synchronized void incrementLamportTimestamp() {
         this.lamportTimestamp++;
-        //this.lamportTimestamp += offset;
+        this.lamportTimestamp += offset;
     }
 
     public synchronized void updateLamportTimestamp(long receivedTimestamp) {
