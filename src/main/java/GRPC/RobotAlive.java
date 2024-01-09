@@ -162,12 +162,18 @@ public class RobotAlive extends Thread {
 
                         ModelRobot.setDistrictChanging(false);
 
-                        synchronized (ModelRobot.getInstance().getBalanceLock()){
+                        /*try {
+                            Thread.sleep(1500);
+                        }catch (Exception e ){
+                            e.printStackTrace();
+                        }*/
+
+                        /*synchronized (ModelRobot.getInstance().getBalanceLock()){
                             ModelRobot.getInstance().getBalanceLock().notifyAll();
-                        }
+                        }*/
 
                     }
-                    else{
+                    /*else{
                         synchronized (ModelRobot.getInstance().getBalanceLock()){
                             try {
                                 //System.out.println("Going to wait 1.");
@@ -178,7 +184,7 @@ public class RobotAlive extends Thread {
 
                             }
                         }
-                    }
+                    }*/
                 }
             }
         }

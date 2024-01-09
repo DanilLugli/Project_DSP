@@ -10,7 +10,11 @@ import beans.Robot;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import io.grpc.*;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
+import io.grpc.stub.StreamObserver;
 import proto.Grpc;
 import proto.RobotServiceGrpc;
 import simulators.BufferImpl;
@@ -22,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class RobotProcess {
     static Robot robot;
@@ -31,6 +36,10 @@ public class RobotProcess {
     static ArrayList<Measurement> measurementList = new ArrayList<>();
     static Server server;
     static CoordRobot coordRobot;
+
+    static Thread mechanicThread;
+
+    static boolean allowRequestMechanic = false;
     static MQTTClient mqttPublisher = new MQTTClient("tcp://localhost:1883");
 
 
@@ -44,7 +53,7 @@ public class RobotProcess {
         createStartRobot();
 
         //Manage Robot stuff
-        manageRobotExit();
+        manageRobotInput();
 
     }
 
@@ -195,9 +204,11 @@ public class RobotProcess {
          sendThread = new Thread(() -> {
             while (ModelRobot.isRunning()) {
 
-                synchronized (ModelRobot.getInstance().getMechanicLock()){
+                synchronized (sendThread){
                     try{
-                        ModelRobot.getInstance().getMechanicLock().wait();
+                        if(ModelRobot.getInstance().getRobotRepairing()){
+                            sendThread.wait();
+                        }
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -229,7 +240,7 @@ public class RobotProcess {
         }
     }
 
-    private static void manageRobotExit() {
+    private static void manageRobotInput() {
         ArrayList<Robot> robotArrayList = ModelRobot.getInstance().getRobotArrayList();
         new Thread(() -> {
             try {
@@ -237,7 +248,7 @@ public class RobotProcess {
                     Scanner scanner = new Scanner(System.in);
                     String input = scanner.next();
 
-                    if (input.equals("exit")) {
+                    if (input.equals("quit")) {
 
                         synchronized (ModelRobot.getInstance().getMechanicLock()){
                             while (ModelRobot.getInstance().getRobotRepairing() || ModelRobot.getInstance().getRequestMechanic()){
@@ -298,13 +309,104 @@ public class RobotProcess {
                             e.printStackTrace();
                         }
 
-                    } else if (input.equals("bal")) {
+                    }
+                    else if (input.equals("bal")) {
 
                         System.out.println("DIS (AFTER CALL): ");
                         for (int n: ModelRobot.getInstance().getDistrictMap().values()
                         ) {
                             System.out.println(n);
                         }
+                    }
+                    else if (input.equals("fix")) {
+
+                        allowRequestMechanic = true;
+
+                        ArrayList<Robot> iterList = new ArrayList<>(ModelRobot.getInstance().getRobotArrayList());
+
+                        My_CountdownLatch latch;
+                        ModelRobot.getInstance().setRequestMechanic(true);
+                        latch = new My_CountdownLatch(iterList.size() -1);
+
+                        //LAMPORT - SEND MESSAGE
+                        ModelRobot.getInstance().getCurrentRobot().incrementLamportTimestamp();
+                        System.out.println("\nMaking MECHANIC Request...");
+                        System.out.println("TIME: " + ModelRobot.getInstance().getCurrentRobot().getLamportTimestamp());
+                        for (Robot r : iterList) {
+                            if (!r.getID().equals(ModelRobot.getInstance().getCurrentRobot().getID())) {
+                                try {
+
+                                    final ManagedChannel channel = ManagedChannelBuilder.forTarget(r.getIP() + ":" + r.getPort())
+                                            .usePlaintext()
+                                            .build();
+
+                                    RobotServiceGrpc.RobotServiceStub stub = RobotServiceGrpc.newStub(channel);
+                                    Grpc.RequestMechanicRequest request = Grpc.RequestMechanicRequest.newBuilder()
+                                            .setRobotId(ModelRobot.getInstance().getCurrentRobot().getID())
+                                            .setTimestamp(ModelRobot.getInstance().getCurrentRobot().getLamportTimestamp())
+                                            .build();
+
+                                    stub.requestMechanic(request, new StreamObserver<Grpc.RequestMechanicResponse>() {
+                                        @Override
+                                        public void onNext(Grpc.RequestMechanicResponse response) {
+                                            if (response.getReply().equals("OK")) {
+                                                latch.countDown();
+                                            }
+                                            System.out.println("Response: " + r.getID() + ": " + response.getReply());
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable t) {
+                                            //t.printStackTrace();
+                                            latch.countDown(); // Decrementa il latch anche in caso di errore
+                                        }
+
+                                        @Override
+                                        public void onCompleted() {
+                                            channel.shutdownNow();
+                                            try {
+                                                if (!channel.awaitTermination(5, TimeUnit.SECONDS)) {
+                                                    channel.shutdownNow();
+                                                }
+                                            } catch (InterruptedException e) {
+                                                channel.shutdownNow();
+                                            }
+                                        }
+                                    });
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        latch.await();
+
+                        ModelRobot.getInstance().setRequestMechanic(false);
+
+                        System.out.println("\n--> RECEIVING ASSISTANCE FROM MECHANIC...");
+                        ModelRobot.getInstance().setRobotRepairing(true);
+
+                        Thread.sleep(20000);
+
+                        ModelRobot.getInstance().setRobotRepairing(false);
+                        System.out.println("...ASSISTANCE FINISHED! <--\n");
+
+                        ModelRobot.getInstance().getCurrentRobot().updateLamportTimestamp(ModelRobot.getInstance().getCurrentRobot().getLamportTimestamp());
+
+                        synchronized (sendThread){
+                            sendThread.notifyAll();
+                        }
+
+                        synchronized (mechanicThread) {
+                            allowRequestMechanic = false;
+                            mechanicThread.notifyAll();
+                        }
+
+                        synchronized (ModelRobot.getInstance().getMechanicLock()){
+                            ModelRobot.getInstance().getMechanicLock().notifyAll();
+                        }
+
                     }
                 }
             } catch (Exception e) {
@@ -332,7 +434,7 @@ public class RobotProcess {
                     }
                 }
                 try {
-                    Thread.sleep(7000); // Wait 10 seconds
+                    Thread.sleep(10000); // Wait 10 seconds
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -346,13 +448,19 @@ public class RobotProcess {
 
     private static void requestMechanic(){
 
-        Thread mechanicThread = new Thread(() -> {
+         mechanicThread = new Thread(() -> {
             try {
                 while (true) {
 
+                    synchronized (mechanicThread) {
+                        if (allowRequestMechanic) {
+                            mechanicThread.wait(); // Attende finché allowRequestMechanic non diventa true
+                        }
+                    }
+
                     ArrayList<Robot> iterList = new ArrayList<>(ModelRobot.getInstance().getRobotArrayList());
 
-                    if (Math.random() <= 0.4) { //10% of chance
+                    if (Math.random() <= 0.1) { //10% of chance
 
                         My_CountdownLatch latch;
                         ModelRobot.getInstance().setRequestMechanic(true);
@@ -370,26 +478,39 @@ public class RobotProcess {
                                             .usePlaintext()
                                             .build();
 
-                                    RobotServiceGrpc.RobotServiceBlockingStub stub = RobotServiceGrpc.newBlockingStub(channel);
+                                    RobotServiceGrpc.RobotServiceStub stub = RobotServiceGrpc.newStub(channel);
                                     Grpc.RequestMechanicRequest request = Grpc.RequestMechanicRequest.newBuilder()
                                             .setRobotId(ModelRobot.getInstance().getCurrentRobot().getID())
                                             .setTimestamp(ModelRobot.getInstance().getCurrentRobot().getLamportTimestamp())
                                             .build();
 
-                                    Grpc.RequestMechanicResponse response;
+                                    stub.requestMechanic(request, new StreamObserver<Grpc.RequestMechanicResponse>() {
+                                        @Override
+                                        public void onNext(Grpc.RequestMechanicResponse response) {
+                                            if (response.getReply().equals("OK")) {
+                                                latch.countDown();
+                                            }
+                                            System.out.println("Response: " + r.getID() + ": " + response.getReply());
+                                        }
 
-                                    try {
+                                        @Override
+                                        public void onError(Throwable t) {
+                                            //t.printStackTrace();
+                                            latch.countDown(); // Decrementa il latch anche in caso di errore
+                                        }
 
-                                        response = stub.requestMechanic(request);
-                                        if(response.getReply().equals("OK"))
-                                            latch.countDown();
-                                        System.out.println("Response: " + r.getID() + ": " + response.getReply());
-
-                                    } catch (StatusRuntimeException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                    channel.shutdownNow();
+                                        @Override
+                                        public void onCompleted() {
+                                            channel.shutdownNow();
+                                            try {
+                                                if (!channel.awaitTermination(5, TimeUnit.SECONDS)) {
+                                                    channel.shutdownNow();
+                                                }
+                                            } catch (InterruptedException e) {
+                                                channel.shutdownNow();
+                                            }
+                                        }
+                                    });
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -411,6 +532,11 @@ public class RobotProcess {
 
                         ModelRobot.getInstance().getCurrentRobot().updateLamportTimestamp(ModelRobot.getInstance().getCurrentRobot().getLamportTimestamp());
 
+                        synchronized (sendThread){
+                            sendThread.notifyAll();
+
+                        }
+                        //allowRequestMechanic = false;
                         synchronized (ModelRobot.getInstance().getMechanicLock()){
                             ModelRobot.getInstance().getMechanicLock().notifyAll();
                         }
@@ -423,6 +549,7 @@ public class RobotProcess {
         });
         mechanicThread.start();
     }
+
 
 }
 
